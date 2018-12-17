@@ -378,7 +378,9 @@ final Node<K,V> getNode(int hash, Object key) {
     return null;
 }
 
-get(key)方法时获取key的hash值，计算hash&(n-1)得到在链表数组中的位置first=tab[hash&(n-1)],先判断first的key是否与参数key相等，不等就判断是树节点还是链表节点。如果是树节点就调用 return ((TreeNode<K,V>)first).getTreeNode(hash, key)获取value; 如果是链表节点就遍历后面的链表找到相同的key值返回对应的Value值即可
+get(key)方法时获取key的hash值，计算hash&(n-1)得到在链表数组中的位置first=tab[hash&(n-1)],先判断first的key是否与参数key相等，
+不等就判断是树节点还是链表节点。如果是树节点就调用 return ((TreeNode<K,V>)first).getTreeNode(hash, key)获取value; 
+如果是链表节点就遍历后面的链表找到相同的key值返回对应的Value值即可
 
 ### resize方法
 进行扩容，会伴随着一次重新hash分配，并且会遍历hash表中所有的元素，是非常耗时的。在编写程序中，要尽量避免resize。
