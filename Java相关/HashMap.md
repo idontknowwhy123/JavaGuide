@@ -386,85 +386,200 @@ get(key)方法时获取key的hash值，计算hash&(n-1)得到在链表数组中�
 进行扩容，会伴随着一次重新hash分配，并且会遍历hash表中所有的元素，是非常耗时的。在编写程序中，要尽量避免resize。
 ```java
 final Node<K,V>[] resize() {
-    Node<K,V>[] oldTab = table;
-    int oldCap = (oldTab == null) ? 0 : oldTab.length;
-    int oldThr = threshold;
-    int newCap, newThr = 0;
-    if (oldCap > 0) {
-        // 超过最大值就不再扩充了，就只好随你碰撞去吧
-        if (oldCap >= MAXIMUM_CAPACITY) {
-            threshold = Integer.MAX_VALUE;
-            return oldTab;
-        }
-        // 没超过最大值，就扩充为原来的2倍
-        else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY && oldCap >= DEFAULT_INITIAL_CAPACITY)
-            newThr = oldThr << 1; // double threshold
-    }
-    else if (oldThr > 0) // initial capacity was placed in threshold
-        newCap = oldThr;
-    else { 
-        signifies using defaults
-        newCap = DEFAULT_INITIAL_CAPACITY;
-        newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
-    }
-    // 计算新的resize上限
-    if (newThr == 0) {
-        float ft = (float)newCap * loadFactor;
-        newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ? (int)ft : Integer.MAX_VALUE);
-    }
-    threshold = newThr;
-    @SuppressWarnings({"rawtypes","unchecked"})
-        Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
-    table = newTab;
-    if (oldTab != null) {
-        // 把每个bucket都移动到新的buckets中
-        for (int j = 0; j < oldCap; ++j) {
-            Node<K,V> e;
-            if ((e = oldTab[j]) != null) {
-                oldTab[j] = null;
-                if (e.next == null)
-                    newTab[e.hash & (newCap - 1)] = e;
-                else if (e instanceof TreeNode)
-                    ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
-                else { 
-                    Node<K,V> loHead = null, loTail = null;
-                    Node<K,V> hiHead = null, hiTail = null;
-                    Node<K,V> next;
-                    do {
-                        next = e.next;
-                        // 原索引
-                        if ((e.hash & oldCap) == 0) {
-                            if (loTail == null)
-                                loHead = e;
-                            else
-                                loTail.next = e;
-                            loTail = e;
-                        }
-                        // 原索引+oldCap
-                        else {
-                            if (hiTail == null)
-                                hiHead = e;
-                            else
-                                hiTail.next = e;
-                            hiTail = e;
-                        }
-                    } while ((e = next) != null);
-                    // 原索引放到bucket里
-                    if (loTail != null) {
-                        loTail.next = null;
-                        newTab[j] = loHead;
-                    }
-                    // 原索引+oldCap放到bucket里
-                    if (hiTail != null) {
-                        hiTail.next = null;
-                        newTab[j + oldCap] = hiHead;
-                    }
-                }
-            }
-        }
-    }
-    return newTab;
-}
+ 2     //保存旧的 Hash 数组
+ 3     Node<K,V>[] oldTab = table;
+ 4     int oldCap = (oldTab == null) ? 0 : oldTab.length;
+ 5     int oldThr = threshold;
+ 6     int newCap, newThr = 0;
+ 7     if (oldCap > 0) {
+ 8         //超过最大容量，不再进行扩充
+ 9         if (oldCap >= MAXIMUM_CAPACITY) {
+10             threshold = Integer.MAX_VALUE;
+11             return oldTab;
+12         }
+13         //容量没有超过最大值，容量变为原来的两倍
+14         else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
+15                  oldCap >= DEFAULT_INITIAL_CAPACITY)
+16                  //阀值变为原来的两倍
+17             newThr = oldThr << 1; 
+18     }
+19     else if (oldThr > 0) 
+20         newCap = oldThr;
+21     else {
+22     //阀值和容量使用默认值
+23         newCap = DEFAULT_INITIAL_CAPACITY;
+24         newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+25     }
+26     if (newThr == 0) {
+27     //计算新的阀值
+28         float ft = (float)newCap * loadFactor;
+29         //阀值没有超过最大阀值，设置新的阀值
+30         newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
+31                   (int)ft : Integer.MAX_VALUE);
+32     }
+33     threshold = newThr;
+34     @SuppressWarnings({"rawtypes","unchecked"})
+35     //创建新的 Hash 表
+36         Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
+37     table = newTab;
+38     //遍历旧的 Hash 表
+39     if (oldTab != null) {
+40         for (int j = 0; j < oldCap; ++j) {
+41             Node<K,V> e;
+42             if ((e = oldTab[j]) != null) {
+43                 //释放空间
+44                 oldTab[j] = null;
+45                 //当前节点不是以链表的形式存在
+46                 if (e.next == null)
+47                     newTab[e.hash & (newCap - 1)] = e;
+48                     //红黑树的形式，略过
+49                 else if (e instanceof TreeNode)
+50                     ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
+51                 else { 
+52                 //以链表形式存在的节点；
+53                 //这一段就是新优化的地方，见下面分析
+54                     Node<K,V> loHead = null, loTail = null;
+55                     Node<K,V> hiHead = null, hiTail = null;
+56                     Node<K,V> next;
+57                     do {
+58                         next = e.next;
+59                         if ((e.hash & oldCap) == 0) {
+60                             if (loTail == null)
+61                                 loHead = e;
+62                             else
+63                                 loTail.next = e;
+64                             loTail = e;
+65                         }
+66                         else {
+67                             if (hiTail == null)
+68                                 hiHead = e;
+69                             else
+70                                 hiTail.next = e;
+71                             hiTail = e;
+72                         }
+73                     } while ((e = next) != null);
+74                     if (loTail != null) {
+75                     //最后一个节点的下一个节点做空
+76                         loTail.next = null;
+77                         newTab[j] = loHead;
+78                     }
+79                     if (hiTail != null) {
+80                     //最后一个节点的下一个节点做空
+81                         hiTail.next = null;
+82                         newTab[j + oldCap] = hiHead;
+83                     }
+84                 }
+85             }
+86         }
+87     }
+88     return newTab;
+89 }
+主要逻辑就是，循环数组内每一个元素
+
+1、是普通节点，直接和1.7一样放置；
+
+2、红黑树，调用 split 修剪方法进行拆分放置（不是本文要点，略）；
+
+3、是链表………………
+
+是不是链表那段没看懂?下面举一个例子就好明白了：
+
+假如现在容量为初始容量16，再假如5，21，37，53的hash自己（二进制），
+
+所以在oldTab中的存储位置就都是 hash & （16 - 1）【16-1就是二进制1111，就是取最后四位】，
+
+5  ：00000101
+
+21：00010101
+
+37：00100101
+
+53：00110101
+
+四个数与（16-1）相与后都是0101
+
+即原始链为：5--->21--->37--->53---->null
+
+此时进入代码中 do-while 循环，对链表节点进行遍历，判断是留下还是去新的链表：
+
+lo就是扩容后仍然在原地的元素链表
+
+hi就是扩容后下标为  原位置+原容量  的元素链表，从而不需要重新计算hash。    
+
+因为扩容后计算存储位置就是  hash & （32 - 1）【取后5位】，但是并不需要再计算一次位置，
+
+此处只需要判断左边新增的那一位（右数第5位）是否为1即可判断此节点是留在原地lo还是移动去高位hi：(e.hash & oldCap) == 0 （oldCap是16也就是10000，相与即取新的那一位）
+
+5  ：00000101——————》0留在原地  lo链表
+
+21：00010101——————》1移向高位  hi链表
+
+37：00100101——————》0留在原地  lo链表
+
+53：00110101——————》1移向高位  hi链表
+
+第一轮循环
+
+loHead：5
+
+loTail:5
+
+其他：null
+
+第二轮循环
+
+loHead：5
+
+loTail:5
+
+hiHead：21
+
+hiTail：21
+
+第三轮循环
+
+loHead：5 （5.next = 37）
+
+loTail:37
+
+hiHead：21
+
+hiTail：21
+
+。。。
+
+所以循环结束之后：
+
+loHead：5 
+
+loTail:37
+
+hiHead：21
+
+hiTail：53
+
+lo：5--->37---->null
+
+hi：21--->53---->null
+
+退出循环后只需要判断lo，hi是否为空，然后把各自链表头结点直接放到对应位置上即可完成整个链表的移动。
+
+原理是：利用了尾指针Tail，完成了尾部插入，不会造成逆序，所以也不会产生并发死锁的问题。
+
+ 
+
+这种方法对比1.7中算法的优点是：
+
+1、不管怎么样都不需要重新再计算hash；
+
+2、放过去的链表内元素的相对顺序不会改变；
+
+3、不会在并发扩容中发生死锁。
+
+注意，时间复杂度并没有减少
+
+有以上分析同样可以得出hashmap扩容的开销很大，日常开发中应该根据实际需要设定合适的  初始容量  和  负载因子 ，这对提高程序性能有不小帮助。
+
 jdk1.7:使用一个容量更大的数组来代替已有的容量小的数组，transfer()方法将原有Entry数组的元素拷贝到新的Entry数组里。
 jdk1.8:因此，我们在扩充HashMap的时候，不需要像JDK1.7的实现那样重新计算hash，只需要看看原来的hash值新增的那个bit是1还是0就好了，是0的话索引没变，
 是1的话索引变成“原索引+oldCap”.这个设计确实非常的巧妙，既省去了重新计算hash值的时间，而且同时，由于新增的1bit是0还是1可以认为是随机的，
