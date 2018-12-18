@@ -150,7 +150,8 @@
 
 重要的成员变量：
 
-1、capacity：容量，表示目前map的存储大小，在源码中分为默认和最大，默认是在没有指定容量大小的时候会赋予这个值，最大表示当容量达到这个值时，不再支持扩容。
+1、capacity：容量，表示目前map的存储大小，在源码中分为默认和最大，默认是在没有指定容量大小的时候会赋予这个值，最大表示当容量达到这个值时，
+不再支持扩容。
 
     /**
      * The largest possible table capacity.  This value must be
@@ -178,7 +179,8 @@
      */
     private static final float LOAD_FACTOR = 0.75f;
 
-3、TREEIFY_THRESHOLD与UNTREEIFY_THRESHOLD：作为了解，这个两个主要是控制链表和红黑树转化的，前者表示大于这个值，需要把链表转换为红黑树，后者表示如果红黑树的节点小于这个值需要重新转化为链表。关于为什么要把链表转化为红黑树，在HashMap的介绍中，我已经详细解释过了。
+3、TREEIFY_THRESHOLD与UNTREEIFY_THRESHOLD：作为了解，这个两个主要是控制链表和红黑树转化的，前者表示大于这个值，需要把链表转换为红黑树，
+后者表示如果红黑树的节点小于这个值需要重新转化为链表。关于为什么要把链表转化为红黑树，在HashMap的介绍中，我已经详细解释过了。
 
     /**
      * The bin count threshold for using a tree rather than list for a
@@ -225,7 +227,8 @@
 6、sizeCtl，标志控制符。这个参数非常重要，出现在ConcurrentHashMap的各个阶段，不同的值也表示不同情况和不同功能： 
 ①负数代表正在进行初始化或扩容操作 
 ②-N 表示有N-1个线程正在进行扩容操作 （前面已经说过了，当线程进行值添加的时候判断到正在扩容，它就会协助扩容） 
-③正数或0代表hash表还没有被初始化，这个数值表示初始化或下一次进行扩容的大小，类似于扩容阈值。它的值始终是当前ConcurrentHashMap容量的0.75倍，这与loadfactor是对应的。实际容量>=sizeCtl，则扩容。
+③正数或0代表hash表还没有被初始化，这个数值表示初始化或下一次进行扩容的大小，类似于扩容阈值。它的值始终是当前ConcurrentHashMap容量的0.75倍，
+这与loadfactor是对应的。实际容量>=sizeCtl，则扩容。
 
 注意：在某些情况下，这个值就相当于HashMap中的threshold阀值。用于控制扩容。
 
@@ -289,7 +292,9 @@
         }
     }
 
-从上面的Node内部类源码可以看出，它的value 和 next是用volatile修饰的，关于volatile已经在前面一篇博文介绍过，使得value和next具有可见性和有序性，从而保证线程安全。同时大家仔细看过代码就会发现setValue（）方法访问是会抛出异常，是禁止用该方法直接设置value值的。同时它还错了一个find的方法，该方法主要是用户寻找某一个节点。
+从上面的Node内部类源码可以看出，它的value 和 next是用volatile修饰的，关于volatile已经在前面一篇博文介绍过，使得value和next具有可见性和有序性，
+从而保证线程安全。同时大家仔细看过代码就会发现setValue（）方法访问是会抛出异常，是禁止用该方法直接设置value值的。同时它还错了一个find的方法，
+该方法主要是用户寻找某一个节点。
 
 2、TreeNode和TreeBin
 
@@ -394,7 +399,9 @@
             assert checkInvariants(root);
         }
 
-从上面的源码可以看出，在ConcurrentHashMap中不是直接存储TreeNode来实现的，而是用TreeBin来包装TreeNode来实现的。也就是说在实际的ConcurrentHashMap桶中，存放的是TreeBin对象，而不是TreeNode对象。之所以TreeNode继承自Node是为了附带next指针，而这个next指针可以在TreeBin中寻找下一个TreeNode，这里也是与HashMap之间比较大的区别。
+从上面的源码可以看出，在ConcurrentHashMap中不是直接存储TreeNode来实现的，而是用TreeBin来包装TreeNode来实现的。
+也就是说在实际的ConcurrentHashMap桶中，存放的是TreeBin对象，而不是TreeNode对象。之所以TreeNode继承自Node是为了附带next指针，
+而这个next指针可以在TreeBin中寻找下一个TreeNode，这里也是与HashMap之间比较大的区别。
 
 3、ForwordingNode
 
@@ -444,15 +451,19 @@
 认识阶段就写到这里，对这些东西有一定的了解，在下一篇，也就是尾篇中，我会逐字逐句来介绍transfer（）扩容，put（）添加和get（）查询三个方法。
 
 transfer方法（扩容方法） 
-再这之前，我大致描述一下扩容的过程：首先有且只能由一个线程构建一个nextTable，这个nextTable主要是扩容后的数组（容量已经扩大），然后把原table复制到nextTable中，这个过程可以多线程共同操作。但是一定要清楚，这个复制并不是简单的把原table的数据直接移动到nextTable中，而是需要有一定的规律和算法操控的（不然怎么把树转化为链表呢）。
+再这之前，我大致描述一下扩容的过程：首先有且只能由一个线程构建一个nextTable，这个nextTable主要是扩容后的数组（容量已经扩大），
+然后把原table复制到nextTable中，这个过程可以多线程共同操作。但是一定要清楚，这个复制并不是简单的把原table的数据直接移动到nextTable中，
+而是需要有一定的规律和算法操控的（不然怎么把树转化为链表呢）。
 
 再这之前，先简单说下复制的过程： 
 数组中（桶中）总共分为3种存储情况：空，链表头，TreeBin头 
-①遍历原来的数组（原table），如果数组中某个值为空，则直接放置一个forwordingNode（上篇博文介绍过）。 
-②如果数组中某个值不为空，而是一个链表头结点，那么就对这个链表进行拆分为两个链表，存储到nextTable对应的两个位置。 
-③如果数组中某个值不为空，而是一个TreeBin头结点，那么这个地方就存储的是红黑树的结构，这样一来，处理就会变得相对比较复杂，就需要先判断需不需要把树转换为链表，做完一系列的处理，然后把对应的结果存储在nextTable的对应两个位置。
+1遍历原来的数组（原table），如果数组中某个值为空，则直接放置一个forwordingNode（上篇博文介绍过）。 
+2如果数组中某个值不为空，而是一个链表头结点，那么就对这个链表进行拆分为两个链表，存储到nextTable对应的两个位置。 
+3如果数组中某个值不为空，而是一个TreeBin头结点，那么这个地方就存储的是红黑树的结构，这样一来，处理就会变得相对比较复杂，
+就需要先判断需不需要把树转换为链表，做完一系列的处理，然后把对应的结果存储在nextTable的对应两个位置。
 
-在上一篇博文中介绍过，多个线程进行扩容操作的时候，会判断原table的值，如果这个值是forwordingNode就表示这个节点被处理过了，就直接继续往下找。接下来，我们针对源码逐字逐句介绍：
+在上一篇博文中介绍过，多个线程进行扩容操作的时候，会判断原table的值，如果这个值是forwordingNode就表示这个节点被处理过了，就直接继续往下找。
+接下来，我们针对源码逐字逐句介绍：
 
     /**
      * Moves and/or copies the nodes in each bin to new table. See
@@ -613,13 +624,15 @@ transfer方法（扩容方法）
 
 PUT方法 
 再这之前，先简单说一下PUT的具体操作： 
-①先传入一个k和v的键值对，不可为空（HashMap是可以为空的），如果为空就直接报错。 
-②接着去判断table是否为空，如果为空就进入初始化阶段。 
-③如果判断数组中某个指定的桶是空的，那就直接把键值对插入到这个桶中作为头节点，而且这个操作不用加锁。 
-④如果这个要插入的桶中的hash值为-1，也就是MOVED状态（也就是这个节点是forwordingNode），那就是说明有线程正在进行扩容操作，那么当前线程就进入协助扩容阶段。 
-⑤需要把数据插入到链表或者树中，如果这个节点是一个链表节点，那么就遍历这个链表，如果发现有相同的key值就更新value值，如果遍历完了都没有发现相同的key值，就需要在链表的尾部插入该数据。插入结束之后判断该链表节点个数是否大于8，如果大于就需要把链表转化为红黑树存储。 
-⑥如果这个节点是一个红黑树节点，那就需要按照树的插入规则进行插入。 
-⑦put结束之后，需要给map已存储的数量+1，在addCount方法中判断是否需要扩容
+1先传入一个k和v的键值对，不可为空（HashMap是可以为空的），如果为空就直接报错。 
+2接着去判断table是否为空，如果为空就进入初始化阶段。 
+3如果判断数组中某个指定的桶是空的，那就直接把键值对插入到这个桶中作为头节点，而且这个操作不用加锁。 
+4如果这个要插入的桶中的hash值为-1，也就是MOVED状态（也就是这个节点是forwordingNode），那就是说明有线程正在进行扩容操作，
+那么当前线程就进入协助扩容阶段。 
+5需要把数据插入到链表或者树中，如果这个节点是一个链表节点，那么就遍历这个链表，如果发现有相同的key值就更新value值，
+如果遍历完了都没有发现相同的key值，就需要在链表的尾部插入该数据。插入结束之后判断该链表节点个数是否大于8，如果大于就需要把链表转化为红黑树存储。 
+6如果这个节点是一个红黑树节点，那就需要按照树的插入规则进行插入。 
+7put结束之后，需要给map已存储的数量+1，在addCount方法中判断是否需要扩容
 
     /** Implementation for put and putIfAbsent */
     final V putVal(K key, V value, boolean onlyIfAbsent) {
@@ -779,10 +792,14 @@ Get方法不论是在HashMap和ConcurrentHashMap都是最容易理解的，它�
         return null;
     }
 这个get请求，我们需要cas来保证变量的原子性。如果tab[i]正被锁住，那么CAS就会失败，失败之后就会不断的重试。这也保证了get在高并发情况下不会出错。 
-我们来分析下到底有多少种情况会导致get在并发的情况下可能取不到值。1、一个线程在get的时候，另一个线程在对同一个key的node进行remove操作；2、一个线程在get的时候，另一个线程正则重排table。可能导致旧table取不到值。 
-那么本质是，我在get的时候，有其他线程在对同一桶的链表或树进行修改。那么get是怎么保证同步性的呢？我们看到e = tabAt(tab, (n - 1) & h)) != null，在看下tablAt到底是干嘛的：
+我们来分析下到底有多少种情况会导致get在并发的情况下可能取不到值。1、一个线程在get的时候，另一个线程在对同一个key的node进行remove操作；
+2、一个线程在get的时候，另一个线程正则重排table。可能导致旧table取不到值。 那么本质是，我在get的时候，有其他线程在对同一桶的链表或树进行修改
+那么get是怎么保证同步性的呢？我们看到e = tabAt(tab, (n - 1) & h)) != null，在看下tablAt到底是干嘛的：
 
 static final <K,V> Node<K,V> tabAt(Node<K,V>[] tab, int i) {
     return (Node<K,V>)U.getObjectVolatile(tab, ((long)i << ASHIFT) + ABASE);
 }
-它是对tab[i]进行原子性的读取，因为我们知道putVal等对table的桶操作是有加锁的，那么一般情况下我们对桶的读也是要加锁的，但是我们这边为什么不需要加锁呢？因为我们用了Unsafe的getObjectVolatile，因为table是volatile类型，所以对tab[i]的原子请求也是可见的。因为如果同步正确的情况下，根据happens-before原则，对volatile域的写入操作happens-before于每一个后续对同一域的读操作。所以不管其他线程对table链表或树的修改，都对get读取可见。
+它是对tab[i]进行原子性的读取，因为我们知道putVal等对table的桶操作是有加锁的，那么一般情况下我们对桶的读也是要加锁的，
+但是我们这边为什么不需要加锁呢？因为我们用了Unsafe的getObjectVolatile，因为table是volatile类型，所以对tab[i]的原子请求也是可见的。
+因为如果同步正确的情况下，根据happens-before原则，对volatile域的写入操作happens-before于每一个后续对同一域的读操作。
+所以不管其他线程对table链表或树的修改，都对get读取可见。
