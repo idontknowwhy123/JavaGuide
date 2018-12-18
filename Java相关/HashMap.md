@@ -102,7 +102,7 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
 
 - **threshold**
 
-  **threshold = capacity * loadFactor**，**当Size>=threshold**，且新建的Entry刚好落在一个非空的桶上那么就要考虑对数组的扩增了，也就是说，这个的意思就是 **衡量数组是否需要扩增的一个标准**。
+  **threshold = capacity（数据长度） * loadFactor**，**当Size>=threshold**，且新建的Entry刚好落在一个非空的桶上那么就要考虑对数组的扩增了，也就是说，这个的意思就是 **衡量数组是否需要扩增的一个标准**。
 
 **Node节点类源码:**
 
