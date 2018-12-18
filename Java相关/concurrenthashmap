@@ -778,4 +778,11 @@ Get方法不论是在HashMap和ConcurrentHashMap都是最容易理解的，它�
         //都没有找到就直接返回null值
         return null;
     }
+这个get请求，我们需要cas来保证变量的原子性。如果tab[i]正被锁住，那么CAS就会失败，失败之后就会不断的重试。这也保证了get在高并发情况下不会出错。 
+我们来分析下到底有多少种情况会导致get在并发的情况下可能取不到值。1、一个线程在get的时候，另一个线程在对同一个key的node进行remove操作；2、一个线程在get的时候，另一个线程正则重排table。可能导致旧table取不到值。 
+那么本质是，我在get的时候，有其他线程在对同一桶的链表或树进行修改。那么get是怎么保证同步性的呢？我们看到e = tabAt(tab, (n - 1) & h)) != null，在看下tablAt到底是干嘛的：
 
+static final <K,V> Node<K,V> tabAt(Node<K,V>[] tab, int i) {
+    return (Node<K,V>)U.getObjectVolatile(tab, ((long)i << ASHIFT) + ABASE);
+}
+它是对tab[i]进行原子性的读取，因为我们知道putVal等对table的桶操作是有加锁的，那么一般情况下我们对桶的读也是要加锁的，但是我们这边为什么不需要加锁呢？因为我们用了Unsafe的getObjectVolatile，因为table是volatile类型，所以对tab[i]的原子请求也是可见的。因为如果同步正确的情况下，根据happens-before原则，对volatile域的写入操作happens-before于每一个后续对同一域的读操作。所以不管其他线程对table链表或树的修改，都对get读取可见。
