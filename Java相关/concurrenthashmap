@@ -745,8 +745,7 @@ transfer方法放在了addCount方法中，下面是addCount方法的源码：
         }
     }
     
-    GET方法
-
+GET方法
 Get方法不论是在HashMap和ConcurrentHashMap都是最容易理解的，它的主要步骤是： 
 ①先判断数组的桶中的第一个节点是否寻找的对象是为链表还是红黑树， 
 ②如果是红黑树另外做处理 
