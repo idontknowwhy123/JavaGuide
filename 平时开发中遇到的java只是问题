@@ -1,0 +1,33 @@
+1.java中需要用equals来判断两个字符串值是否相等
+
+但在java中，这个代码即使在两个字符串完全相同的情况下也会返回false 
+Java中必须使用string1.equals(string2)来进行判断 
+eg: 
+string s1="Hello"; 
+string s2="Hello"; 
+则(s1==s2)=true; 
+因为他们指向的同一个对象。
+ eg:
+String s1=new String("Hello"); 
+String s2=new String("Hello"); 
+则(s1==s2)=false
+如果把其他变量的值赋给s1和s2，即使内容相同，由于不是指向同一个对象，也会返回false。所以建议使用equals()，因为equals比较的才是真正的内容 
+例如： 
+String string1=new String( "aaa" ); 
+String string2=new String( "aaa" ); 
+这两个字符串当然应该是相等的。 
+如果用表达式string1==string2，则该表达式的值为false 
+如果用表达式string1.equals(string2)，则该表达式的值为true 
+因此应该用string1.equals(string2)，在if语句中就是 
+if(string1.equals(string2)==true) //字符串相等，……
+
+string1==string2,是值相等,而且内存地址也相等,是完全的相等 
+string1.equals(string2)为true,只是值相等
+
+2.List en=null，定义了Entity的集合变量，并且实例化为null，与前面一个不同的是他可以被使用，但仅限于equals、==等判断或者其它非取值等操作；
+想用的话也是需要实例化或者里面已经有值了,否则会报错空指针
+
+    List<MoRecord> mos=null;
+    mts = new ArrayList<MtRecord>();
+    mts.addAll(mtArrList);
+Listen=new ArrayList() 定义并且实例化为Arraylist，这个时候就可以做所有的List和ArrayList的操作，比如添加值、取值、迭代等等操作。 
