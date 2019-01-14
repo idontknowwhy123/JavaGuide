@@ -109,3 +109,5 @@ Listen=new ArrayList() 定义并且实例化为Arraylist，这个时候就可以
 39         thread1.start();
 40         thread2.start();
 41     }
+
+![](http://www.baidu.com/img/bdlogo.gif)  
