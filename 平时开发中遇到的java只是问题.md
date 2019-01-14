@@ -1,113 +1,113 @@
 1.java中需要用equals来判断两个字符串值是否相等
 
-但在java中，这个代码即使在两个字符串完全相同的情况下也会返回false 
-Java中必须使用string1.equals(string2)来进行判断 
-eg: 
+但在java中，这个代码即使在两个字符串完全相同的情况下也会返回false<br> 
+Java中必须使用string1.equals(string2)来进行判断<br> 
+eg:<br> 
 string s1="Hello";<br>
 string s2="Hello";<br>
 则(s1==s2)=true;<br>
 因为他们指向的同一个对象。<br>
- eg:
-String s1=new String("Hello"); 
-String s2=new String("Hello"); 
-则(s1==s2)=false
-如果把其他变量的值赋给s1和s2，即使内容相同，由于不是指向同一个对象，也会返回false。所以建议使用equals()，因为equals比较的才是真正的内容 
-例如： 
-String string1=new String( "aaa" ); 
-String string2=new String( "aaa" ); 
-这两个字符串当然应该是相等的。 
-如果用表达式string1==string2，则该表达式的值为false 
-如果用表达式string1.equals(string2)，则该表达式的值为true 
-因此应该用string1.equals(string2)，在if语句中就是 
-if(string1.equals(string2)==true) //字符串相等，……
+ eg:<br>
+String s1=new String("Hello");<br> 
+String s2=new String("Hello");<br> 
+则(s1==s2)=false<br>
+如果把其他变量的值赋给s1和s2，即使内容相同，由于不是指向同一个对象，也会返回false。所以建议使用equals()，因为equals比较的才是真正的内容<br> 
+例如：<br> 
+String string1=new String( "aaa" );<br> 
+String string2=new String( "aaa" );<br> 
+这两个字符串当然应该是相等的。<br> 
+如果用表达式string1==string2，则该表达式的值为false<br> 
+如果用表达式string1.equals(string2)，则该表达式的值为true <br>
+因此应该用string1.equals(string2)，在if语句中就是 <br>
+if(string1.equals(string2)==true) //字符串相等，……<br>
 
-string1==string2,是值相等,而且内存地址也相等,是完全的相等 
-string1.equals(string2)为true,只是值相等
+string1==string2,是值相等,而且内存地址也相等,是完全的相等<br> 
+string1.equals(string2)为true,只是值相等<br>
 
-2.List en=null，定义了Entity的集合变量，并且实例化为null，与前面一个不同的是他可以被使用，但仅限于equals、==等判断或者其它非取值等操作；
-想用的话也是需要实例化或者里面已经有值了,否则会报错空指针
+2.List en=null，定义了Entity的集合变量，并且实例化为null，与前面一个不同的是他可以被使用，但仅限于equals、==等判断或者其它非取值等操作；<br>
+想用的话也是需要实例化或者里面已经有值了,否则会报错空指针<br>
 
-    List<MoRecord> mos=null;
-    mts = new ArrayList<MtRecord>();
-    mts.addAll(mtArrList);
-Listen=new ArrayList() 定义并且实例化为Arraylist，这个时候就可以做所有的List和ArrayList的操作，比如添加值、取值、迭代等等操作。 
+    List<MoRecord> mos=null;<br>
+    mts = new ArrayList<MtRecord>();<br>
+    mts.addAll(mtArrList);<br>
+Listen=new ArrayList() 定义并且实例化为Arraylist，这个时候就可以做所有的List和ArrayList的操作，比如添加值、取值、迭代等等操作。<br> 
 
 
-3.Exception in thread "main" java.util.ConcurrentModificationException
-  问题场景
- 1     public void test1()  {
- 2         ArrayList<Integer> arrayList = new ArrayList<>();
- 3         for (int i = 0; i < 20; i++) {
- 4             arrayList.add(Integer.valueOf(i));
+3.Exception in thread "main" java.util.ConcurrentModificationException<br>
+  问题场景<br>
+ 1     public void test1()  {<br>
+ 2         ArrayList<Integer> arrayList = new ArrayList<>();<br>
+ 3         for (int i = 0; i < 20; i++) {<br>
+ 4             arrayList.add(Integer.valueOf(i));<br>
  5         }
  6 
  7         // 复现方法一
- 8         Iterator<Integer> iterator = arrayList.iterator();
- 9         while (iterator.hasNext()) {
-10             Integer integer = iterator.next();
-11             if (integer.intValue() == 5) {
-12                 arrayList.remove(integer);
-13             }
-14         }
+ 8         Iterator<Integer> iterator = arrayList.iterator();<br>
+ 9         while (iterator.hasNext()) {<br>
+10             Integer integer = iterator.next();<br>
+11             if (integer.intValue() == 5) {<br>
+12                 arrayList.remove(integer);<br>
+13             }<br>
+14         }<br>
 15 
 16         // 复现方法二
-17         iterator = arrayList.iterator();
-18         for (Integer value : arrayList) {
-19             Integer integer = iterator.next();
-20             if (integer.intValue() == 5) {
-21                 arrayList.remove(integer);
-22             }
-23         }
-24     }
+17         iterator = arrayList.iterator();<br>
+18         for (Integer value : arrayList) {<br>
+19             Integer integer = iterator.next();<br>
+20             if (integer.intValue() == 5) {<br>
+21                 arrayList.remove(integer);<br>
+22             }<br>
+23         }<br>
+24     }<br>
 
-解决办法:
-如果要在foreach循环中删除list中的元素，要使用itrator迭代器，借助itrator的remove方法删除元素，若使用list的remove方法则会抛出异常
+解决办法:<br>
+如果要在foreach循环中删除list中的元素，要使用itrator迭代器，借助itrator的remove方法删除元素，若使用list的remove方法则会抛出异常<br>
 
-·如果要在foreach循环中添加list元素，则要另外new一个list。因为直接对list使用add，会抛出异常，而itrator并没有刻意向list中添加元素的方法。
-所以也无法借助iterator。所以可以采取另外new一个list，然后借助list接口的addAll方法，将原来的list整个加入到新list中，此时循环旧的list，
-调用新的list的add方法添加元素就可以达到目的。
+·如果要在foreach循环中添加list元素，则要另外new一个list。因为直接对list使用add，会抛出异常，而itrator并没有刻意向list中添加元素的方法。<br>
+所以也无法借助iterator。所以可以采取另外new一个list，然后借助list接口的addAll方法，将原来的list整个加入到新list中，此时循环旧的list，<br>
+调用新的list的add方法添加元素就可以达到目的。<br>
 
-多线程下的解决方案：
- public static void test5() {
- 2         ArrayList<Integer> arrayList = new ArrayList<>();
- 3         for (int i = 0; i < 20; i++) {
- 4             arrayList.add(Integer.valueOf(i));
- 5         }
+多线程下的解决方案：<br>
+ public static void test5() {<br>
+ 2         ArrayList<Integer> arrayList = new ArrayList<>();<br>
+ 3         for (int i = 0; i < 20; i++) {<br>
+ 4             arrayList.add(Integer.valueOf(i));<br>
+ 5         }<br>
  6 
- 7         Thread thread1 = new Thread(new Runnable() {
- 8             @Override
- 9             public void run() {
-10                 synchronized (arrayList) {
-11                     ListIterator<Integer> iterator = arrayList.listIterator();
-12                     while (iterator.hasNext()) {
-13                         System.out.println("thread1 " + iterator.next().intValue());
-14                         try {
-15                             Thread.sleep(100);
-16                         } catch (InterruptedException e) {
-17                             e.printStackTrace();
-18                         }
-19                     }
-20                 }
-21             }
-22         });
+ 7         Thread thread1 = new Thread(new Runnable() {<br>
+ 8             @Override<br>
+ 9             public void run() {<br>
+10                 synchronized (arrayList) {<br>
+11                     ListIterator<Integer> iterator = arrayList.listIterator();<br>
+12                     while (iterator.hasNext()) {<br>
+13                         System.out.println("thread1 " + iterator.next().intValue());<br>
+14                         try {<br>
+15                             Thread.sleep(100);<br>
+16                         } catch (InterruptedException e) {<br>
+17                             e.printStackTrace();<br>
+18                         }<br>
+19                     }<br>
+20                 }<br>
+21             }<br>
+22         });<br>
 23 
-24         Thread thread2 = new Thread(new Runnable() {
-25             @Override
-26             public void run() {
-27                 synchronized (arrayList) {
-28                     ListIterator<Integer> iterator = arrayList.listIterator();
-29                     while (iterator.hasNext()) {
-30                         Integer integer = iterator.next();
-31                         System.out.println("thread2 " + integer.intValue());
-32                         if (integer.intValue() == 5) {
-33                             iterator.remove();
-34                         }
-35                     }
-36                 }
-37             }
-38         });
-39         thread1.start();
-40         thread2.start();
-41     }
+24         Thread thread2 = new Thread(new Runnable() {<br>
+25             @Override<br>
+26             public void run() {<br>
+27                 synchronized (arrayList) {<br>
+28                     ListIterator<Integer> iterator = arrayList.listIterator();<br>
+29                     while (iterator.hasNext()) {<br>
+30                         Integer integer = iterator.next();<br>
+31                         System.out.println("thread2 " + integer.intValue());<br>
+32                         if (integer.intValue() == 5) {<br>
+33                             iterator.remove();<br>
+34                         }<br>
+35                     }<br>
+36                 }<br>
+37             }<br>
+38         });<br>
+39         thread1.start();<br>
+40         thread2.start();<br>
+41     }<br>
 
 ![](http://www.baidu.com/img/bdlogo.gif)  
