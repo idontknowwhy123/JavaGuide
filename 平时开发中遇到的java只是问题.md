@@ -4,9 +4,9 @@
 Java中必须使用string1.equals(string2)来进行判断 
 eg: 
 string s1="Hello";<br>
-string s2="Hello"; 
-则(s1==s2)=true; 
-因为他们指向的同一个对象。
+string s2="Hello";<br>
+则(s1==s2)=true;<br>
+因为他们指向的同一个对象。<br>
  eg:
 String s1=new String("Hello"); 
 String s2=new String("Hello"); 
