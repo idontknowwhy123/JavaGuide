@@ -3,7 +3,7 @@
 但在java中，这个代码即使在两个字符串完全相同的情况下也会返回false 
 Java中必须使用string1.equals(string2)来进行判断 
 eg: 
-<br> string s1="Hello";\<br>
+string s1="Hello";<br>
 string s2="Hello"; 
 则(s1==s2)=true; 
 因为他们指向的同一个对象。
