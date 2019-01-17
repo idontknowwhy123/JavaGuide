@@ -110,4 +110,4 @@ Listen=new ArrayList() 定义并且实例化为Arraylist，这个时候就可以
 40         thread2.start();<br>
 41     }<br>
 
-![](http://www.baidu.com/img/bdlogo.gif)  
+4.某个微服务A依赖于另外一个微服务B，则应该先编译微服务B，则微服务A才能正常调用微服务B
