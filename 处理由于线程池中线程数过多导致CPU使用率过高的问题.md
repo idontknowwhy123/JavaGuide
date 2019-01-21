@@ -14,3 +14,4 @@
  IO密集型=2Ncpu（可以测试后自己控制大小，2Ncpu一般没问题）（常出现于线程中：数据库数据交互、文件上传下载、网络数据传输等等）<br>
  计算密集型=Ncpu（常出现于线程中：复杂算法）<br>
  java中CPU核数：Ncpu=Runtime.getRuntime().availableProcessors()<br>
+ 总结:即线程等待时间所占比例越高，需要越多线程。线程CPU时间所占比例越高，需要越少线程。 
