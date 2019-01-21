@@ -10,4 +10,7 @@
  因为我们已经拿不出更多的线程供CPU调度了。<br>
  ![](https://images2015.cnblogs.com/blog/584866/201705/584866-20170526170508450-925520860.png)
  
- 
+1.3线程池中线程个数的确定<br>
+ IO密集型=2Ncpu（可以测试后自己控制大小，2Ncpu一般没问题）（常出现于线程中：数据库数据交互、文件上传下载、网络数据传输等等）<br>
+ 计算密集型=Ncpu（常出现于线程中：复杂算法）<br>
+ java中CPU核数：Ncpu=Runtime.getRuntime().availableProcessors()<br>
