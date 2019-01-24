@@ -110,4 +110,35 @@ Listen=new ArrayList() 定义并且实例化为Arraylist，这个时候就可以
 40         thread2.start();<br>
 41     }<br>
 
-4.某个微服务A依赖于另外一个微服务B，则应该先编译微服务B，则微服务A才能正常调用微服务B
+4.某个微服务A依赖于另外一个微服务B，则应该先编译微服务B，则微服务A才能正常调用微服务B<br>
+
+5.基本数据类型与字符串之间的转换<br>
+5.1.int转为String<br>
+    整型转换成字符型<br>
+　　String num = Integer.toString(int n);或者是String.valueOf(int n)<br>
+　  Long型转换成字符型<br>
+　　String num = Long.toString(long n);<br>或者是String.valueOf(long n)<br>
+　　Short型转换成字符型<br>
+　　String num = Short.toString(Short n);<br>或者是String.valueOf(Short n)<br>
+　　Float型转换成字符型<br>
+　　String num = Float.toString(Float n);<br>或者是String.valueOf(Float n)<br>
+　　Double型转换成字符型<br>
+　　String num = Double.toString(Double n);<br>或者是String.valueOf(Double n)<br>
+  
+5.2.String转换成int<br>
+　　转换成Int型<br>
+　　int/Integer num = Integer.parseInt(String str);<br>
+　　转换成long型<br>
+　　Long/long num = Long.parseLong(String str);<br>
+　　转换成short型<br>
+　　short/Short num = Short.parseShort(String str);<br>
+　　转换成float型<br>
+　　float/Float num = Float.parseFloat(String str);<br>
+　　转换成double型<br>
+　　double/Double num = Double.parseDouble(String str);<br>
+  
+ 6.java对象转化为String类型<br>
+  方法一：object.toString()（常用）<br>
+  方法二：（String）object<br>
+  方法三：String.valueOf(Object)<br>
+  
