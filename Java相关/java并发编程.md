@@ -121,44 +121,44 @@ LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。<br>
   ArrayBlockingQueue中用来存储元素的实际上是一个数组<br>
   然后看它的两个关键方法的实现：put()和take()：<br>
   public void put(E e) throws InterruptedException {<br>
-    if (e == null) throw new NullPointerException();<br>
-    final E[] items = this.items;<br>
-    final ReentrantLock lock = this.lock;<br>
-    lock.lockInterruptibly();<br>
-    try {<br>
-        try {<br>
-            while (count == items.length)<br>
-                notFull.await();<br>
-        } catch (InterruptedException ie) {<br>
-            notFull.signal(); // propagate to non-interrupted thread<br>
-            throw ie;<br>
-        }<br>
-        insert(e);<br>
-    } finally {<br>
-        lock.unlock();<br>
-    }<br>
-}<br>
+    >if (e == null) throw new NullPointerException();<br>
+    >final E[] items = this.items;<br>
+    >final ReentrantLock lock = this.lock;<br>
+    >lock.lockInterruptibly();<br>
+    >try {<br>
+       >> try {<br>
+            >>>while (count == items.length)<br>
+                >>>>notFull.await();<br>
+        >>} catch (InterruptedException ie) {<br>
+            >>>>notFull.signal(); // propagate to non-interrupted thread<br>
+            >>>>throw ie;<br>
+       >> }<br>
+       >>>> insert(e);<br>
+    >>} finally {<br>
+        >>>>lock.unlock();<br>
+    >>}<br>
+>}<br>
 从put方法的实现可以看出，它先获取了锁，并且获取的是可中断锁（ReentrantLock保证公平性，阻塞的线程可以按照阻塞的先后顺序访问队列），<br>
 然后判断当前元素个数是否等于数组的长度，如果相等，则调用notFull.await()进行等待，如果捕获到中断异常，则唤醒线程并抛出异常。<br>
 当被其他线程唤醒时，通过insert(e)方法插入元素，最后解锁。<br>
 下面是take()方法的实现<br>
 public E take() throws InterruptedException {<br>
-    final ReentrantLock lock = this.lock;<br>
-    lock.lockInterruptibly();<br>
-    try {<br>
-        try {<br>
-            while (count == 0)<br>
-                notEmpty.await();<br>
-        } catch (InterruptedException ie) {<br>
-            notEmpty.signal(); // propagate to non-interrupted thread<br>
-            throw ie;<br>
-        }<br>
-        E x = extract();<br>
-        return x;<br>
-    } finally {<br>
-        lock.unlock();<br>
-    }<br>
-}<br>
+    >final ReentrantLock lock = this.lock;<br>
+    >lock.lockInterruptibly();<br>
+    >try {<br>
+        >>try {<br>
+           >>> while (count == 0)<br>
+                >>>>notEmpty.await();<br>
+        >>} catch (InterruptedException ie) {<br>
+            >>>>notEmpty.signal(); // propagate to non-interrupted thread<br>
+            >>>>throw ie;<br>
+        >>}<br>
+        >>>>E x = extract();<br>
+        >>>>return x;<br>
+    >>} finally {<br>
+        >>>>lock.unlock();<br>
+    >>}<br>
+>}<br>
 从put方法的实现可以看出，它先获取了锁，并且获取的是可中断锁（ReentrantLock保证公平性，阻塞的线程可以按照阻塞的先后顺序访问队列），<br>
 然后判断当前元素个数是否等于0，如果相等，则调用notEmpty.await()进行等待，如果捕获到中断异常，则唤醒线程并抛出异常。<br>
 当被其他线程唤醒时，通过extract()方法获取元素，最后解锁。<br>
