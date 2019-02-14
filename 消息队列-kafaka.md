@@ -126,5 +126,5 @@ ActiveMQ和RocketMQ
 总之，针对这个问题，我的观点是保证入队有序就行，出队以后的顺序交给消费者自己去保证，没有固定套路
 
 1.kafka拓扑结构
-![](https://blog.csdn.net/u010020099/article/details/82290403.png)
+![](https://img-blog.csdn.net/20180902105920995?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMjAwOTk=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 -
