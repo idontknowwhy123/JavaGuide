@@ -38,14 +38,14 @@ docker exec -it docker_name /bin/sh
 docker exec -it docker_id /bin/sh
 docker exec -ti docker_id /bin/sh
 
-docker容器中的文件拷贝到本地服务器上
-1.查询容器id：docker ps|grep itmmps
-2.docker cp docker_id:/home/zenap/itmmps/itm-mps.jar /home/ubuntu/(.当前目录)
-3.scp -r ubuntu@10.74.165.77:/home/ubuntu /home/ubuntu/(.当前目录)
-4.通过filezilla等工具拷贝到本地服务上
+docker容器中的文件拷贝到本地服务器上<br>
+1.查询容器id：docker ps|grep itmmps<br>
+2.docker cp docker_id:/home/zenap/itmmps/itm-mps.jar /home/ubuntu/(.当前目录)<br>
+3.scp -r ubuntu@10.74.165.77:/home/ubuntu /home/ubuntu/(.当前目录)<br>
+4.通过filezilla等工具拷贝到本地服务上<br>
 
-本地服务器的文件拷贝到docker容器中
-1.通过filezilla等工具拷贝到远程服务器上
-2.将服务器上的文件拷贝到小网ip，eg：scp -r /home/ubuntu/itm-mps.jar ubuntu@192.167.0.7:/home/ubuntu
-3.查询容器id：docker ps|grep itmmps
-4.docker cp /home/ubuntu/itm-mps.jar docker_id:/home/zenap/itmmps
+本地服务器的文件拷贝到docker容器中<br>
+1.通过filezilla等工具拷贝到远程服务器上<br>
+2.将服务器上的文件拷贝到小网ip，eg：scp -r /home/ubuntu/itm-mps.jar ubuntu@192.167.0.7:/home/ubuntu<br>
+3.查询容器id：docker ps|grep itmmps<br>
+4.docker cp /home/ubuntu/itm-mps.jar docker_id:/home/zenap/itmmps<br>
