@@ -14,3 +14,38 @@
 6 PORTS                     表示容器对外的端口号
 
 7 NAMES                    表示容器名称，该名称默认由Docker自动生成，也可使用docker run 命令的 -name 选项自行指定
+
+docker ps|grep (某个容器内的2微服务)：查找某个微服务对应的docker容器信息
+
+删除镜像
+docker rm IMAGE ID
+
+查看镜像
+docker images
+
+查看容器 
+docker ps -a
+docker ps|grep itmmps
+
+启动/停止容器
+docker start/stop docker_id
+
+重启容器
+docker restart docker_id
+
+进入容器 
+docker exec -it docker_name /bin/sh
+docker exec -it docker_id /bin/sh
+docker exec -ti docker_id /bin/sh
+
+docker容器中的文件拷贝到本地服务器上
+1.查询容器id：docker ps|grep itmmps
+2.docker cp docker_id:/home/zenap/itmmps/itm-mps.jar /home/ubuntu/(.当前目录)
+3.scp -r ubuntu@10.74.165.77:/home/ubuntu /home/ubuntu/(.当前目录)
+4.通过filezilla等工具拷贝到本地服务上
+
+本地服务器的文件拷贝到docker容器中
+1.通过filezilla等工具拷贝到远程服务器上
+2.将服务器上的文件拷贝到小网ip，eg：scp -r /home/ubuntu/itm-mps.jar ubuntu@192.167.0.7:/home/ubuntu
+3.查询容器id：docker ps|grep itmmps
+4.docker cp /home/ubuntu/itm-mps.jar docker_id:/home/zenap/itmmps
