@@ -53,4 +53,6 @@ docker容器中的文件拷贝到本地服务器上<br>
 
 对容器所有请求读写抓包方法（用于排查问题）
 
-
+ps -ef|grep ssm-server
+root      94373  94287 17 Feb21 ?        02:42:39 /openj9jdk/bin/java -Xms200m -Xm
+sudo strace -p 94373 -f -e trace=network -s 1000
