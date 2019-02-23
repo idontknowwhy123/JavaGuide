@@ -1,7 +1,7 @@
 使用docker ps 命令即可列出运行中的容器，docker ps -a命令即可列出所有容器（包括未运行的）
 执行该命令后，会出现如下7列表格
 
-1  CONTAINER_ID      表示容器ID
+1  CONTAINER_ID              表示容器ID
 
 2  IMAGE                     表示镜像名称
 
@@ -10,6 +10,7 @@
 4  CREATED                表示容器的创建时间
 
 5 STATUS                   表示容器运行的状态。UP表示运行中，EXITED表示已停止
+                          (EXITED为1的话一般是应用程序出问题，EXITED为137的话一般是OOM)
 
 6 PORTS                     表示容器对外的端口号
 
