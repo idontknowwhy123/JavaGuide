@@ -56,3 +56,5 @@ docker容器中的文件拷贝到本地服务器上<br>
 ps -ef|grep ssm-server<br>
 root      94373  94287 17 Feb21 ?        02:42:39 /openj9jdk/bin/java -Xms200m -Xm<br>
 sudo strace -p 94373 -f -e trace=network -s 1000
+
+docker logs dockerId(查看容器日志)
