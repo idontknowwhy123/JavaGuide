@@ -50,3 +50,7 @@ docker容器中的文件拷贝到本地服务器上<br>
 2.将服务器上的文件拷贝到小网ip，eg：scp -r /home/ubuntu/itm-mps.jar ubuntu@192.167.0.7:/home/ubuntu<br>
 3.查询容器id：docker ps|grep itmmps<br>
 4.docker cp /home/ubuntu/itm-mps.jar docker_id:/home/zenap/itmmps<br>
+
+对容器所有请求读写抓包方法（用于排查问题）
+
+
