@@ -16,7 +16,7 @@
 
 7 NAMES                    表示容器名称，该名称默认由Docker自动生成，也可使用docker run 命令的 -name 选项自行指定
 
-docker ps|grep (某个容器内的2微服务)：查找某个微服务对应的docker容器信息
+docker ps -a|grep (某个容器内的2微服务)：查找某个微服务对应的docker容器信息
 
 删除镜像
 docker rm IMAGE ID
@@ -25,7 +25,7 @@ docker rm IMAGE ID
 docker images
 
 查看容器 
-docker ps -a
+docker ps -a<br>
 docker ps|grep itmmps
 
 启动/停止容器
