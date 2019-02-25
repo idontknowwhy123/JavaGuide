@@ -142,3 +142,11 @@ Listen=new ArrayList() 定义并且实例化为Arraylist，这个时候就可以
   方法二：（String）object<br>
   方法三：String.valueOf(Object)<br>
   
+ 7.
+ 1.1   throw是语句抛出一个异常。<br>
+       语法：throw (异常对象);<br>
+       throw e;<br>
+
+1.2   throws是方法可能抛出异常的声明。(用在声明方法时，表示该方法可能要抛出异常)<br>
+      语法：[(修饰符)](返回值类型)(方法名)([参数列表])[throws(异常类)]{......}<br>
+      public void doA(int a) throws Exception1,Exception3{......}<br>
