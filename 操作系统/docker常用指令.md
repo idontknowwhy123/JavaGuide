@@ -58,3 +58,10 @@ root      94373  94287 17 Feb21 ?        02:42:39 /openj9jdk/bin/java -Xms200m -
 sudo strace -p 94373 -f -e trace=network -s 1000
 
 docker logs dockerId(查看容器日志)
+
+查看docker容器日志所在位置
+1.docker info查看docker系统信息
+找类似的内容：Docker Root Dir: /var/lib/docker
+docker日志一般在[docker-root]/containers/[container-ID]/[container-ID]-json.log目录下
+
+
