@@ -65,3 +65,6 @@ docker logs dockerId(查看容器日志)
 docker日志一般在[docker-root]/containers/[container-ID]/[container-ID]-json.log目录下
 
 
+k8s查看某个微服务的信息
+kubectl describe pod itmuaf-itm-uaf-1-mnghw -n ranoss
+
