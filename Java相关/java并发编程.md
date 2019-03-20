@@ -165,7 +165,5 @@ public E take() throws InterruptedException {<br>
 
 ConcurrentLinkedQueue入队和出队操作均利用CAS（compare and set）更新，这样允许多个线程并发执行，并且不会因为加锁而阻塞线程，使得并发性能更好。
 
-
-
-
-
+4.Thread.interrupt()
+https://blog.csdn.net/tianyuxingxuan/article/details/76222935
