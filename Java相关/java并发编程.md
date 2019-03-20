@@ -167,3 +167,4 @@ ConcurrentLinkedQueue入队和出队操作均利用CAS（compare and set）更�
 
 4.Thread.interrupt()
 https://blog.csdn.net/tianyuxingxuan/article/details/76222935
+https://www.cnblogs.com/skywang12345/p/3479949.html
