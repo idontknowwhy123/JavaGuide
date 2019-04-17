@@ -9,3 +9,9 @@ rm -f  python.py<br>
 删除目录使用实例： <br>
 rm -rf  /home/song/wahaha <br>
 将会删除/home/song/wahaha目录以及其下所有文件、文件夹 <br>
+
+3.tail -f .log实时查看日志
+  tail -n 500查看日志最后500行
+  Head -n 500查看日志前500行
+  
+4.curl url(curl命令可以通过restClient生成)查看某个url请求的结果
