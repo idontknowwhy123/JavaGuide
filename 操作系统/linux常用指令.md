@@ -15,3 +15,5 @@ rm -rf  /home/song/wahaha <br>
   Head -n 500查看日志前500行
   
 4.curl url(curl命令可以通过restClient生成)查看某个url请求的结果
+
+5.括号转义\(123\)
