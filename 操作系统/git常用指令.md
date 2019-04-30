@@ -60,3 +60,8 @@
                    2.git reset commitA之前的那次提交
                    3.再重新提交本地代码
                    
+ 10.git出现（master|rebase）
+    取消master分支上的rebase操作
+    git rebase --abort
+ 
+                   
