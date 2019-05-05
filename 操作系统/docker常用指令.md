@@ -38,6 +38,7 @@ docker restart docker_id
 docker exec -it docker_name /bin/sh
 docker exec -it docker_id /bin/sh
 docker exec -ti docker_id /bin/sh
+docker-manage enter 容器名
 
 docker容器中的文件拷贝到本地服务器上<br>
 1.查询容器id：docker ps|grep itmmps<br>
