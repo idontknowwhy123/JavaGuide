@@ -17,3 +17,5 @@ rm -rf  /home/song/wahaha <br>
 4.curl url(curl命令可以通过restClient生成)查看某个url请求的结果
 
 5.括号转义\(123\)
+
+6.pwd(查看当前目录)
