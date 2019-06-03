@@ -19,3 +19,10 @@ rm -rf  /home/song/wahaha <br>
 5.括号转义\(123\)
 
 6.pwd(查看当前目录)
+
+7.touch 123.txt(创建文件)
+
+8.mkdir 123(创建文件夹)
+
+9.同平台拷贝(cp)
+  跨平台拷贝(scp)
