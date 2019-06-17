@@ -63,5 +63,11 @@
  10.git出现（master|rebase）
     取消master分支上的rebase操作
     git rebase --abort
+    
+ 11.git出现commit已经push上去了，但是无法merge的问题
+    原因：上次commit被abandon掉了，这次提交节点的父节点对应这次anandon的节点
+    解决办法：reset到abandon那次节点的上次一次提交，然后再重新提交push
+
+ 
  
                    
