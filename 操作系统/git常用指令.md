@@ -70,3 +70,17 @@
 
  12.matser分支切换到其他分支报错
     error:pathspec 'master' did not match any file(s)know to git 
+    
+ 13.git commit --amend出现报错you are in the middle of a merge --connot amend问题解决办法
+    1. 取消合并
+    git reset --merge
+    2.将当前分支重新设置基线
+    git rebase 
+    3.在idea里面解决代码冲突
+    4.让rebase继续
+    git rebase --continue
+    5.追加修改后的文件
+    git add .
+    6.提交修改后的代码
+    git commit --amend
+    7.git push
