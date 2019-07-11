@@ -75,7 +75,7 @@ Listen=new ArrayList() 定义并且实例化为Arraylist，这个时候就可以
 
 ·如果要在foreach循环中添加list元素，则要另外new一个list。因为直接对list使用add，会抛出异常，而itrator并没有刻意向list中添加元素的方法。<br>
 所以也无法借助iterator。所以可以采取另外new一个list，然后借助list接口的addAll方法，将原来的list整个加入到新list中，此时循环旧的list，<br>
-调用新的list的add方法添加元素就可以达到目的。<br>
+调用新的list的add方法添加元素就可以达到目的（hashmap是一样的处理方式）。<br>
 
 多线程下的解决方案：<br>
  public static void test5() {<br>
