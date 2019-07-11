@@ -190,16 +190,16 @@ new ArrayList() 或者 new LinkedList() 在创建的时候有会有初始大小�
 https://blog.csdn.net/fenglllle/article/details/81389286
 
 11.将一个引用类型对象在函数外进行定义，作为传参写入函数，如果对值进行修改，则函数外的值会修改，因为引用地址会指向这个修改后的值，
-如果要对值进行赋值则不会被修改，因为引用地址还是指向原来那个值
-例如：List list = new Arraylist();
-     setValue(list);//list不会变
-     setValue2(list);//list会变
-public static void setValue(List list){
-   list = getValue1(String s1);
-}
-public static void setValue2(List list){
-   list.add(1);
-}
+如果要对值进行赋值则不会被修改，因为引用地址还是指向原来那个值<br>
+例如：List list = new Arraylist();<br>
+     setValue(list);//list不会变<br>
+     setValue2(list);//list会变<br>
+public static void setValue(List list){<br>
+   list = getValue1(String s1);<br>
+}<br>
+public static void setValue2(List list){<br>
+   list.add(1);<br>
+}<br>
 
 12.try catch编程习惯
 1.在写程序时，对可能会出现异常的部分通常要用try{…}catch{…}去捕捉它并对它进行处理；
