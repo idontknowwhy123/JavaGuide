@@ -4,6 +4,19 @@
 1.hibernate级联
 https://blog.csdn.net/qq_28483283/article/details/51348558
 
+2.fetch = FetchType.EAGER
+如果是EAGER，那么表示取出这条数据时，它关联的数据也同时取出放入内存中
+
+如果是LAZY，那么取出这条数据时，它关联的数据并不取出来，在同一个session中，什么时候要用，就什么时候取(再次访问数据库)。
+
+如果是hibernate
+
+这东西叫延迟加载，意思就是当lazy为false的时候，你在加载机构树形结构第一层的同时会把树的所有数据都一起加载至内存，在session关闭后也可以使用这些数据，而当lazy为true时，那加载树的第一层时则不去加载整个树的数据，只有当你用到时才去加载，我估计你的问题是去读取下一级机构时，session已经关了，不信你可以看看你报的异常里是不是有关lazy的信息
+
+ 
+
+lazy代表延时加载,lazy=false,代表不延时,如果对象A中还有对象B的引用,会在A的xml映射文件中配置b的对象引用,多对一或一对多,不延时代表查询出对象A的时候,会把B对象也查询出来放到A对象的引用中,A对象中的B对象是有值的.如果lazy=true,代表延时,查询A对象时,不会把B对象也查询出来,只会在用到A对象中B对象时才会去查询,默认好像是false,你可以看看后台的sql语句的变化就明白了,一般需要优化效率的时候会用到.
+
 //128、Hibernate中SessionFactory是线程安全的吗？Session是线程安全的吗（两个线程能够共享同一个Session吗）？</br> 
 答：SessionFactory对应Hibernate的一个数据存储的概念，它是线程安全的，可以被多个线程并发访问。SessionFactory一般只会在启动的时候构建。对于应用程序，最好将SessionFactory通过单例模式进行封装以便于访问。Session是一个轻量级非线程安全的对象（线程间不能共享session），它表示与数据库进行交互的一个工作单元。Session是由SessionFactory创建的，在任务完成之后它会被关闭。Session是持久层服务对外提供的主要接口。Session会延迟获取数据库连接（也就是在需要的时候才会获取）。为了避免创建太多的session，可以使用ThreadLocal将session和当前线程绑定在一起，这样可以让同一个线程获得的总是同一个session。Hibernate 3中SessionFactory的getCurrentSession()方法就可以做到。</br>
 129、Hibernate中Session的load和get方法的区别是什么？</br> 
