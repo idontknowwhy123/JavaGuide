@@ -1,0 +1,30 @@
+1.NIO详解：http://ifeve.com/java-nio-vs-io/
+
+2.IO的读写操作
+   IntputStream int = new FileIntputStream(file)
+   OutputStream out = new FileOutputStream(new File(fileName));
+   int read = 0;
+   byte[] bytes = new byte[1024];
+   while ((read = inputStream.read(bytes)) != -1) {
+          out.write(bytes, 0, read);
+   }
+   out.flush();
+   
+   NIO的读写操作
+    FileInputStream fin = null;
+    FileOutputStream fos = null;
+        try {
+            fin = new FileInputStream(file);
+            FileChannel channel = fin.getChannel();
+            int capacity = 1024;// 字节
+            ByteBuffer bf = ByteBuffer.allocate(capacity);
+            fos = new FileOutputStream(new File(fileName));
+            FileChannel outchannel = fos.getChannel();
+            while (channel.read(bf)!= -1) {
+             bf.flip();
+             outchannel.write(bf);
+             bf.clear();
+            }
+        }
+        
+       效率：快一倍
