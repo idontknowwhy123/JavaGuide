@@ -26,3 +26,19 @@ rm -rf  /home/song/wahaha <br>
 
 9.同平台拷贝(cp)
   跨平台拷贝(scp)
+  
+10.想要回退到一个特定的父目录
+cd../../../../
+回到上一次目录：cd - (可以穿越多层)
+
+11.Linux 下面解压.tar.gz 和.gz文件解压的方式
+两种解压方式
+1.tar.gz 使用tar命令进行解压
+
+ tar -zxvf java.tar.gz
+
+解压到指定的文件夹
+    tar -zxvf java.tar.gz  -C /usr/java
+2.gz文件的解压 gzip 命令
+
+  gzip -d java.gz
