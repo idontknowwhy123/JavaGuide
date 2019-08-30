@@ -210,6 +210,14 @@ public static void setValue2(List list){<br>
 
 4.如果在函数体内用throw抛出了某种异常，最好要在函数名中加throws抛异常声明，然后交给调用它的上层函数进行处理。如果在函数体内用throw抛出了某种异常，最好要在函数名中加throws抛异常声明，然后交给调用它的上层函数进行处理。
 
+Java 中一共有四种访问权限控制，其权限控制的大小情况是这样的：public > protected > default(包访问权限) > private ,具体的权限控制看下面表格，列所指定的类是否有权限允许访问行的权限控制下的内容：
+
+访问权限	本类	本包的类	子类	非子类的外包类
+public	  是	    是    是	    是
+protected	是	   是	   是	    否
+default	 是	    是	   否	    否
+private	 是	    否	   否	    否
+
 
 
 
