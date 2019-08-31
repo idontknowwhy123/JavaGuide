@@ -142,7 +142,7 @@ Producer	消费生产者，向Broker发送消息的客户端。
 Consumer	消息消费者，从Broker读取消息的客户端。
 Consumer Group	每个Consumer属于一个特定的Consumer Group，一条消息可以发送到多个Consumer Group，但是一个Consumer Group中只能有一个Consumer能够消费该消息。
 Partition	物理上的概念，一个Topic可以分为多个Partition，每个Partition内部是有序的。
-https://blog.csdn.net/lp284558195/article/details/80297208
+https://blog.csdn.net/u013256816/article/details/71091774
 https://blog.csdn.net/wangjianan7357/article/details/81836063
 
 -
