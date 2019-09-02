@@ -42,3 +42,11 @@ cd../../../../
 2.gz文件的解压 gzip 命令
 
   gzip -d java.gz
+  
+3.tar –xvf file.tar //解压 tar包
+
+4.unzip file.zip //解压zip
+
+如果出现这个提示：
+-bash: zip: command not found    不能执行ZIP压缩，是因为没有安装ZIP，
+运行下这条安装命令即可  yum install zip
