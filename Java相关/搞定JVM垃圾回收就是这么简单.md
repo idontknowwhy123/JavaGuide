@@ -355,6 +355,23 @@ G1收集器的运作大致分为以下几个步骤：
 补充：1.为什么新生代内存需要有两个Survivor区
 https://blog.csdn.net/bolg_hero/article/details/79344745
 
+2.堆，栈，方法区数据存放和操作流程
+Sample test1 = new Sample("hello");   
+test1.printName();  
+0 知识前导：  
+jvm每个线程都拥有一个方法调用栈，用于跟踪线程中运行的一系列方法调用过程，  
+栈中的每个元素成为栈帧，线程调用每个方法时会将方法栈压入一个新帧，  
+帧里面存放方法参数，局部变量，运算过程产生的临时数据，方法结束则会出栈
+
+1 jvm去方法区寻Sample类信息  
+2 寻找不到，jvm使用classloader加载Sample类信息进入内存方法区  
+3 在堆内存中创建Sample对象，并持有方法区中Sample类的类型信息的引用  
+4 test1添加到执行main()方法的主线程java调用栈中，指向堆空间中的内存对象  
+5 执行test1.printName()时，jvm根据test1定位到堆空间的Sample实例，在根据  
+Sample实例在方法区持有的引用，定位到方法区Sample类型信息，获得printName()  
+字节码，执行此方法执行，打印出结果。  
+看另一个案例图，再次了解下 各个区域存放数据的位置：
+[!http://dl2.iteye.com/upload/attachment/0102/9342/2f464e94-26d5-397f-9d2b-230b7e78b816.png]
 
 参考：
 
