@@ -376,6 +376,7 @@ https://www.cnblogs.com/promonkeys/p/10178976.html
 
 3.JVM的栈上分配与逃逸分析
 https://blog.csdn.net/blueheart20/article/details/52050545
+https://www.cnblogs.com/gaiwen/archive/2013/09/24/3337835.html
 
 参考：
 
