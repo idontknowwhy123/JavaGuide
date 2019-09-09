@@ -372,6 +372,7 @@ Sample实例在方法区持有的引用，定位到方法区Sample类型信息�
 字节码，执行此方法执行，打印出结果。  
 看另一个案例图，再次了解下 各个区域存放数据的位置：
 ![](http://dl2.iteye.com/upload/attachment/0102/9342/2f464e94-26d5-397f-9d2b-230b7e78b816.png)
+https://www.cnblogs.com/promonkeys/p/10178976.html
 
 参考：
 
