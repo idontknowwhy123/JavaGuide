@@ -374,6 +374,9 @@ Sample实例在方法区持有的引用，定位到方法区Sample类型信息�
 ![](http://dl2.iteye.com/upload/attachment/0102/9342/2f464e94-26d5-397f-9d2b-230b7e78b816.png)
 https://www.cnblogs.com/promonkeys/p/10178976.html
 
+3.JVM的栈上分配与逃逸分析
+https://blog.csdn.net/blueheart20/article/details/52050545
+
 参考：
 
 - 《深入理解Java虚拟机：JVM高级特性与最佳实践（第二版》
