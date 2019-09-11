@@ -378,6 +378,9 @@ https://www.cnblogs.com/promonkeys/p/10178976.html
 https://blog.csdn.net/blueheart20/article/details/52050545
 https://www.cnblogs.com/gaiwen/archive/2013/09/24/3337835.html
 
+4.G1,CMS收集器
+https://blog.csdn.net/renfufei/article/details/41897113
+
 参考：
 
 - 《深入理解Java虚拟机：JVM高级特性与最佳实践（第二版》
