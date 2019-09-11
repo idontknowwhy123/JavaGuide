@@ -354,6 +354,7 @@ G1收集器的运作大致分为以下几个步骤：
 
 补充：1.为什么新生代内存需要有两个Survivor区
 https://blog.csdn.net/bolg_hero/article/details/79344745
+https://blog.csdn.net/lojze_ly/article/details/49456255
 
 2.堆，栈，方法区数据存放和操作流程
 Sample test1 = new Sample("hello");   
