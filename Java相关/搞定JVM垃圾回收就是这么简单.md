@@ -382,6 +382,8 @@ https://www.cnblogs.com/gaiwen/archive/2013/09/24/3337835.html
 4.G1,CMS收集器
 https://blog.csdn.net/renfufei/article/details/41897113
 
+5.双亲委派模型
+https://www.jianshu.com/p/9df9d318e838
 参考：
 
 - 《深入理解Java虚拟机：JVM高级特性与最佳实践（第二版》
