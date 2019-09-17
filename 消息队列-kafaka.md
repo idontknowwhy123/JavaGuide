@@ -145,4 +145,7 @@ Partition	物理上的概念，一个Topic可以分为多个Partition，每个Pa
 https://blog.csdn.net/u013256816/article/details/71091774
 https://blog.csdn.net/wangjianan7357/article/details/81836063
 
+补充1.多线程消费者
+https://blog.csdn.net/clypm/article/details/80618036
+
 -
