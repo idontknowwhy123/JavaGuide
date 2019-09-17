@@ -147,5 +147,7 @@ https://blog.csdn.net/wangjianan7357/article/details/81836063
 
 补充1.多线程消费者
 https://blog.csdn.net/clypm/article/details/80618036
+2.多线程Consumer方案
+https://www.cnblogs.com/qizhelongdeyang/p/7355309.html
 
 -
