@@ -387,6 +387,8 @@ https://www.jianshu.com/p/9df9d318e838
 
 6.jvm调优
 https://www.cnblogs.com/andy-zhou/p/5327288.html
+
+将Xms和Xmx设为一样的值。如果虚拟机启动时设置使用的内存比较小，这个时候又需要初始化很多对象，虚拟机就必须重复地增加内存。
 参考：
 
 - 《深入理解Java虚拟机：JVM高级特性与最佳实践（第二版》
