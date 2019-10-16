@@ -1,6 +1,7 @@
 1.chmod +755和chmod +777 各是什么意思<br>
 755 代表用户对该文件拥有读，写，执行的权限，同组其他人员拥有执行和读的权限，没有写的权限，其他用户的权限和同组人员权限一样。。。<br>
 777代表，user,group ,others ,都有读写和可执行权限。。<br>
+https://www.cnblogs.com/z-x-y/p/9287694.html
 
 2.删除文件使用实例： <br>
 rm -f  python.py<br>
@@ -50,3 +51,5 @@ cd../../../../
 如果出现这个提示：
 -bash: zip: command not found    不能执行ZIP压缩，是因为没有安装ZIP，
 运行下这条安装命令即可  yum install zip
+
+12修改文件名字mv name1 name2
