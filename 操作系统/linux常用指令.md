@@ -53,3 +53,9 @@ cd../../../../
 运行下这条安装命令即可  yum install zip
 
 12修改文件名字mv name1 name2
+
+13堆栈打印
+1.ps -ef|grep "进程id"
+2.jstack -l pid打印堆栈信息(kill-3 pid也行)
+
+https://blog.csdn.net/u010271462/article/details/70171553
