@@ -59,3 +59,9 @@ cd../../../../
 2.jstack -l pid打印堆栈信息(kill-3 pid也行)
 
 https://blog.csdn.net/u010271462/article/details/70171553
+
+14查看某个容器进程的线程数
+1.找出容器进程
+docker ps|grep "service"找出容器Id
+docker top CONTAINERID找出容器的进程ID
+top -Hp 容器进程id、
