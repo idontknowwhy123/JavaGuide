@@ -65,3 +65,10 @@ https://blog.csdn.net/u010271462/article/details/70171553
 docker ps|grep "service"找出容器Id
 docker top CONTAINERID找出容器的进程ID
 top -Hp 容器进程id、
+
+15Linux -->在目录内创建文件、显示文件以及拷贝文件到一个目录都需要什么权限？
+https://blog.csdn.net/z517602658/article/details/62076193
+1.在目录内创建文件我们需要用户的写权限。
+2.加上读权限后便可以显示刚刚创建的文件了
+3.只有可执行和读才可拷贝文件
+
