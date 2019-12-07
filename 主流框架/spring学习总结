@@ -4,3 +4,7 @@ BeanFactory是个bean 工厂，是一个工厂类(接口)， 它负责生产和�
 
 FactoryBean是个bean，在IOC容器的基础上给Bean的实现加上了一个简单工厂模式和装饰模式，是一个可以生产对象和装饰对象的工厂bean，由spring管理后，
 生产的对象是由getObject()方法决定的（从容器中获取到的对象不是“ FactoryBeanTest ” 对象）。
+
+
+第一部分：获取单例bean
+
