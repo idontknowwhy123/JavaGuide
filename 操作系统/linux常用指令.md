@@ -58,6 +58,14 @@ cd../../../../
 1.ps -ef|grep "进程id"
 2.jstack -l pid打印堆栈信息(kill-3 pid也行)
 
+14查看某个线程的堆栈信息找到问题代码(CPU彪高)
+1.top找到CPU消耗最高的进程ID
+2.top -Hp p 进程id找出cpu消耗最高的线程id
+3.jstack -l 进程id>123.txt将线程堆栈信息输出到某个文件中
+4.由于刚刚线程id是10进制，而线程堆栈信息是16进制，所以需要将其转化为16进制
+  printf"%x\n" 十进制线程id
+5.通过刚刚转换过的16进制线程id去堆栈文件中去找对应的线程堆栈
+
 https://blog.csdn.net/u010271462/article/details/70171553
 
 14查看某个容器进程的线程数
@@ -73,3 +81,5 @@ https://blog.csdn.net/z517602658/article/details/62076193
 3.只有可执行和读才可拷贝文件
 4.进入一个目录需要执行权限
 
+16、查看某个目录所在位置
+ which 目录
