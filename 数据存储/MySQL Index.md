@@ -110,3 +110,19 @@ ALTER TABLE `table_name` ADD INDEX index_name ( `column1`, `column2`, `column3` 
 - 《MySQL高性能书籍_第3版》
 - https://juejin.im/post/5b55b842f265da0f9e589e79
                            
+https://dev.mysql.com/doc/refman/5.6/en/innodb-transaction-isolation-levels.html
+https://dev.mysql.com/doc/refman/5.7/en/innodb-multi-versioning.html
+https://dev.mysql.com/doc/refman/8.0/en/innodb-next-key-locking.html
+https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html
+https://blog.csdn.net/u013235478/article/details/50625677
+http://www.jfox.info/2017/mysql-explain%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%AF%A6%E7%BB%86%E8%A7%A3%E9%87%8A.html
+https://blog.csdn.net/tongdanping/article/details/79878302
+https://blog.csdn.net/oChangWen/article/details/54024063
+https://www.cnblogs.com/huanongying/p/7021555.html
+https://segmentfault.com/a/1190000016566788
+http://blog.sina.com.cn/s/blog_499740cb0100ugs7.html
+http://zouzls.github.io/2017/03/23/SQL%E6%9F%A5%E8%AF%A2%E4%B9%8B%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E8%A7%A3%E6%9E%90/
+https://mp.weixin.qq.com/s/sOxLZlXRYR-zZKStE7qAwg
+https://mp.weixin.qq.com/s/8lX3Gyq4J5vLHETtG01EdA
+https://www.imooc.com/learn/398
+https://www.imooc.com/learn/272
