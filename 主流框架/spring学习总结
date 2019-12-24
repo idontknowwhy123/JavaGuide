@@ -8,3 +8,17 @@ FactoryBean是个bean，在IOC容器的基础上给Bean的实现加上了一个�
 
 第一部分：获取单例bean
 
+spring面试：
+
+spring
+spring的两大特性- ioc aop，实现原理
+如果存在A依赖B，B依赖A，那么是怎么加到IOC中去的
+beanFactory的理解，怎么加载bean
+FactoryBean的理解
+基于注解的形式，是怎么实现的， 你知道其原理吗，说一下
+依赖冲突，有碰到过吗，你是怎么解决的~
+bean的生命周期
+依赖注入的几种方式
+spring中的自动装配方式
+总之，建议大家如果时间充裕，还是好好看看源码~~
+
