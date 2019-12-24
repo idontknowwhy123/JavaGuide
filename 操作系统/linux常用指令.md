@@ -2,6 +2,8 @@
 755 代表用户对该文件拥有读，写，执行的权限，同组其他人员拥有执行和读的权限，没有写的权限，其他用户的权限和同组人员权限一样。。。<br>
 777代表，user,group ,others ,都有读写和可执行权限。。<br>
 https://www.cnblogs.com/z-x-y/p/9287694.html
+给文件夹赋权
+chmod 777 -R /log
 
 2.删除文件使用实例： <br>
 rm -f  python.py<br>
