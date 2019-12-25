@@ -1,0 +1,10 @@
+1.B+树
+https://www.jianshu.com/p/71700a464e97
+2.mysql事务隔离级别
+https://www.cnblogs.com/huanongying/p/7021555.html
+3.MYSQL MVCC 实现机制
+https://blog.csdn.net/whoamiyang/article/details/51901888
+4.innodb间隙锁，记录锁(行锁)
+https://www.jianshu.com/p/bf862c37c4c9
+5。覆盖索引，聚集索引，非聚集索引
+https://blog.csdn.net/itguangit/article/details/82145322
