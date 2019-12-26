@@ -22,3 +22,8 @@ bean的生命周期
 spring中的自动装配方式
 总之，建议大家如果时间充裕，还是好好看看源码~~
 
+IOC 和 AOP 的含义和原理
+Spring、SpringBoot、SpringMVC 的区别
+SpringBoot 的启动流程
+Bean 的生命周期
+SpringMVC 的流程
