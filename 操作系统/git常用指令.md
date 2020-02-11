@@ -84,3 +84,11 @@
     6.提交修改后的代码
     git commit --amend
     7.git push
+
+14.git stash 引发的问题
+原本是：git stash save -u "描述"
+写成了：git stash save -a "描述"
+-u： 会把没有记录到的文件也保存下来(比如你新建了一个文件，但是还没有git add，stash也会把这个文件保存下来)
+-a： 会把忽略的文件也保存下来（.gitignore中的）
+https://blog.csdn.net/weixin_30700977/article/details/97360968
+
