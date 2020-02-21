@@ -91,4 +91,9 @@
 -u： 会把没有记录到的文件也保存下来(比如你新建了一个文件，但是还没有git add，stash也会把这个文件保存下来)
 -a： 会把忽略的文件也保存下来（.gitignore中的）
 https://blog.csdn.net/weixin_30700977/article/details/97360968
+再用git stash list查看，就看不到任何stash内容了：
 
+$ git stash list
+你可以多次stash，恢复的时候，先用git stash list查看，然后恢复指定的stash，用命令：
+
+$ git stash apply stash@{0}
