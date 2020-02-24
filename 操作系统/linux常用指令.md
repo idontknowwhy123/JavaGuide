@@ -84,4 +84,9 @@ https://blog.csdn.net/z517602658/article/details/62076193
 4.进入一个目录需要执行权限
 
 16、查看某个目录所在位置
- which 目录
+ which 目录 whereis 目录
+ 
+17.打印堆栈信息
+1.找到java路径 whereis java
+2.找到服务进程号 ps -ef|grep "服务"
+3.通过进程号打印堆栈 在java/bin目录下执行./jstack -l pid
