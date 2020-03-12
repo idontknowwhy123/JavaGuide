@@ -69,3 +69,6 @@ docker日志一般在[docker-root]/containers/[container-ID]/[container-ID]-json
 k8s查看某个微服务的信息
 kubectl describe pod itmuaf-itm-uaf-1-mnghw -n ranoss
 
+服务失败的情况下进入镜像
+docker run --rm -it 镜像ID /bin/sh 
+
