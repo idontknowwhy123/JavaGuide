@@ -31,7 +31,9 @@ select id from t where num in(1,2,3)
 select id from t where num between 1 and 3	
 	
 2.2.下面的查询也将导致全表扫描：	
-select id from t where name like '%abc%'	
+select id from t where name like '%abc%'
+如果是符合左前缀，即可走索引
+比如 like abc%
 	
 2.3.应尽量避免在 where 子句中对字段进行表达式操作，这将导致引擎放弃使用索引而进行全表扫描。如：	
 select id from t where num/2=100	
