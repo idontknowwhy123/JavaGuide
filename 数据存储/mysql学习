@@ -9,6 +9,9 @@ https://www.jianshu.com/p/bf862c37c4c9
 5.各种锁以及意向锁存在的意义
 https://blog.csdn.net/u010841296/article/details/84204701
 6.覆盖索引，聚集索引，非聚集索引
+覆盖索引与联合索引的区别？
+没有区别，覆盖索引只是特定于具体select语录而言的联合索引。
+也就是说一个联合索引对于某个select语句，通过索引可以直接获取查询结果，而不再需要回表查询啦，就称该联合索引覆盖了这条select语句。
 https://blog.csdn.net/itguangit/article/details/82145322
 
 SQL优化（总览：sql慢 绝大多数情况下是没有触发索引，进行的是全局检索。哪些情况会检索全表呢？主要分为3种）
