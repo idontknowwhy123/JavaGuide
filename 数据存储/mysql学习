@@ -56,8 +56,8 @@ select id from t where name like 'abc%'
 二、什么情况下需要创建索引。
 数据量要大。
 where 后经常出现的列。
-数据种类要多。不能像 性别 一样 只有两种。
-读多写少的。 insert 和 update 都会更新索引。
+数据种类要多。不能像 性别 一样 只有两种。Cardinality值：表示索引中不重复记录数量的预估值，Cardinality/rows应尽可能接近1
+读多写少的。 因为insert 和 update 都会更新索引。
 
 三、索引的类型
 2.索引类型
