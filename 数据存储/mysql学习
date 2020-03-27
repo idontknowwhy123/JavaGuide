@@ -4,7 +4,7 @@ https://www.jianshu.com/p/71700a464e97
 快照数据是指该行之前的版本数据，实现是通过undo日志来完成的，又称为MVCC机制（多版本并发控制）
 RC隔离级别：总是读取最新的快照数据，所以会出现不可重复读的并发问题
 RR隔离级别，总是读取事物开始时的快照数据，不会出现不可重复读的并发问题，但是会出现幻读的问题，需要通过next-key锁来保证（行锁或间隙锁）
-如果检索条件是主键的话就只需要行锁就行
+如果检索条件是唯一索引（主键）的话就只需要行锁就行
 https://www.cnblogs.com/huanongying/p/7021555.html
 3.MYSQL MVCC 实现机制
 https://blog.csdn.net/whoamiyang/article/details/51901888
