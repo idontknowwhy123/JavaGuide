@@ -95,3 +95,10 @@ https://blog.csdn.net/z517602658/article/details/62076193
    1.找到java安装路径 whereis java 假如是home/ct/java
    2.执行编译：/home/ct/java/bin/javac test.java -Djava.ext.dirs=/home/ct/java/dependency/(有时需要加上-encoding UTF-8)
    3.执行java的main方法：/home/ct/java/bin/java -cp .:1.jar:2.jar:3.jar test(需要依赖1.jar,2.jar,3.jar)
+   
+ 19.查找某个文件
+   find / -name test.java
+
+20.查看某个端口占用情况
+  netstat -anlp|grep "pid"
+
