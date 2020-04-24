@@ -25,7 +25,7 @@ https://www.jianshu.com/p/2104d11ee0a2
 
 原理：https://www.cnblogs.com/chengege/p/11073166.html
 
-3.缓存雪崩
+三.缓存雪崩
 定义：缓存同一时间大面积的失效，所以，后面的请求都会落到数据库上，造成数据库短时间内承受大量请求而崩掉。
 事前：尽量保证整个 redis 集群的高可用性，发现机器宕机尽快补上。选择合适的内存淘汰策略。
 事中：本地ehcache缓存 + hystrix限流&降级，避免MySQL崩掉
@@ -36,3 +36,10 @@ https://www.jianshu.com/p/2104d11ee0a2
      2.加锁排队只是为了减轻数据库的压力，并没有提高系统吞吐量。假设在高并发下，缓存重建期间key是锁着的，这是过来1000个请求999个都在阻塞的。同样会导致用户等待超时，这是个治标不治本的方法！
 
 代码实现：https://blog.csdn.net/zeb_perfect/article/details/54135506?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4
+
+四.单线程的redis为什么那么快
+  1.redis是基于内存的，内存的读写速度非常快；
+  2.redis是单线程的，省去了很多上下文切换线程的时间；
+  3.redis使用多路复用技术，可以处理并发的连接；
+  
+五.redis的数据结构及使用场景
