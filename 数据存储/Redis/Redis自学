@@ -32,6 +32,7 @@ https://www.jianshu.com/p/2104d11ee0a2
 事后：利用 redis 持久化机制保存的数据尽快恢复缓存
 ![](https://camo.githubusercontent.com/5026cff9341b3049578f9a05bdf60b2ec62f28d3/687474703a2f2f6d792d626c6f672d746f2d7573652e6f73732d636e2d6265696a696e672e616c6979756e63732e636f6d2f31382d392d32352f363037383336372e6a7067)
 
-补充：缓存的过期时间应该随机均匀分布。
+补充：1.缓存的过期时间应该随机均匀分布。
+     2.加锁排队只是为了减轻数据库的压力，并没有提高系统吞吐量。假设在高并发下，缓存重建期间key是锁着的，这是过来1000个请求999个都在阻塞的。同样会导致用户等待超时，这是个治标不治本的方法！
 
 代码实现：https://blog.csdn.net/zeb_perfect/article/details/54135506?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4
