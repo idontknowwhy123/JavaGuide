@@ -1,4 +1,4 @@
-1.redis缓存穿透以及解决方案
+一.redis缓存穿透以及解决方案
 https://www.cnblogs.com/lingyejun/p/10087135.html
 
 2.布隆过滤器的原理
@@ -14,7 +14,15 @@ https://www.jianshu.com/p/2104d11ee0a2
 另外，一般情况下不能从布隆过滤器中删除元素. 我们很容易想到把位数组变成整数数组，每插入一个元素相应的计数器加 1, 这样删除元素时将计数器减掉就可以了。
 然而要保证安全地删除元素并非如此简单。首先我们必须保证删除的元素的确在布隆过滤器里面. 这一点单凭这个过滤器是无法保证的。另外计数器回绕也会造成问题
 
-2.缓存击穿以及解决方案
+二.缓存击穿以及解决方案
+定义：缓存在某个时间点过期的时候，恰好在这个时间点对这个Key有大量的并发请求过来，
+这些请求发现缓存过期一般都会从后端DB加载数据并回设到缓存，这个时候大并发的请求可能会瞬间把后端DB压垮。
+
+解决方案：
+1.使用互斥锁
+
+2.永不过期
+
 原理：https://www.cnblogs.com/chengege/p/11073166.html
 
 代码实现：https://blog.csdn.net/zeb_perfect/article/details/54135506?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4
