@@ -32,5 +32,6 @@ https://www.jianshu.com/p/2104d11ee0a2
 事后：利用 redis 持久化机制保存的数据尽快恢复缓存
 ![](https://camo.githubusercontent.com/5026cff9341b3049578f9a05bdf60b2ec62f28d3/687474703a2f2f6d792d626c6f672d746f2d7573652e6f73732d636e2d6265696a696e672e616c6979756e63732e636f6d2f31382d392d32352f363037383336372e6a7067)
 
+补充：缓存的过期时间应该随机均匀分布。
 
 代码实现：https://blog.csdn.net/zeb_perfect/article/details/54135506?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4
