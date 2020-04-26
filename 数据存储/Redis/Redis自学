@@ -110,4 +110,5 @@ allkeys-lru：当内存不足以容纳新写入数据时，在键空间中，移
 allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰
 no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写入数据时，新写入操作会报错。这个应该没人使用吧
 
-LRU算法https://blog.csdn.net/WhereIsHeroFrom/article/details/86501571?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-5&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-5
+LRU算法
+https://blog.csdn.net/WhereIsHeroFrom/article/details/86501571?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-5&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-5
