@@ -112,3 +112,4 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
 
 LRU算法
 https://blog.csdn.net/WhereIsHeroFrom/article/details/86501571?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-5&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-5
+
