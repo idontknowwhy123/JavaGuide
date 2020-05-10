@@ -113,3 +113,9 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
 LRU算法
 https://blog.csdn.net/WhereIsHeroFrom/article/details/86501571?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-5&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-5
 
+redis分布式锁
+1.基于zoopkeeper的实现
+https://blog.csdn.net/wuzhiwei549/article/details/80692278?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1
+2.redission分布式锁原理及实现
+https://blog.csdn.net/shuangyueliao/article/details/89344256
+https://www.cnblogs.com/qdhxhz/p/11046905.html
