@@ -185,3 +185,9 @@ https://blog.csdn.net/u011521203/article/details/80186741
 http://www.importnew.com/30150.html
 
 9.CountDownLatch典型用法1：某一线程在开始运行前等待n个线程执行完毕。将CountDownLatch的计数器初始化为n new CountDownLatch(n) ，每当一个任务线程执行完毕，就将计数器减1 countdownlatch.countDown()，当计数器的值变为0时，在CountDownLatch上 await() 的线程就会被唤醒。一个典型应用场景就是启动一个服务时，主线程需要等待多个组件加载完毕，之后再继续执行。
+
+实现原理：new CountDownLatch(n)初始化计数器为n,
+         CountDownLatch.countDown()调用AQS的tryReleaseShared将采用CAS方式将计数器进行减一
+         CountDownLatch.await()调用AQS的tryAcquireShared方法判断计数器的值是否减为了0，如果为0则退出死循环，否则则一直循环下去，从而达到阻塞当前
+         线程的效果
+         
