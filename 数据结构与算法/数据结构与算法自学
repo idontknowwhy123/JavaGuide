@@ -1,1 +1,659 @@
 
+链表
+输入一个链表，从尾到头打印链表每个节点的值。
+思路分析：先将链表的值全都放入栈中，然后从栈中取出放入list集合中并打印出来
+import java.util.Stack;
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> printListFromTailToHead(ListNode listNode) {
+        Stack<Integer> stack = new Stack<>();
+        while (listNode != null) {
+            stack.push(listNode.val);
+            listNode = listNode.next;
+        }
+ArrayList<Integer> list = new ArrayList<>();
+        while (!stack.isEmpty()) {
+            list.add(stack.pop());
+        }
+        return list;       
+}
+}
+
+输入一个链表，输出该链表中倒数第k个结点。
+public class Solution {
+    public ListNode FindKthToTail(ListNode head,int k) {
+        if(head==null){
+            return null;
+        }
+        int count=0;
+ListNode node=head;
+        while(node!=null){
+            count++;
+            node=node.next;
+         }
+        if(count<k){
+            return null;
+        }
+        ListNode p=head;
+		for(int i=0;i<count-k;i++){
+            p=p.next;
+        }
+        return p;
+    }
+}
+
+
+
+反转链表
+public class Solution {
+    public ListNode ReverseList(ListNode head) {
+		if(head==null){
+            return null;
+        }
+        ListNode pre=null;
+        ListNode next=null;
+        while(head!=null){
+            next=head.next;
+head.next=pre;
+            pre=head;
+            head=next;
+        }
+        return pre;
+    }
+}
+反转链表只需改变链接方向，改变方向时需要将原本指向后一个结点的链接方向指向前一个结点
+
+
+输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
+public class Solution {
+    public ListNode Merge(ListNode list1,ListNode list2) {
+        if(list1==null){
+            return list2;
+        }else if(list2==null){
+            return list1;
+        }
+        ListNode p=null;
+        if(list1.val<list2.val){
+            p=list1;
+            p.next=Merge(list1.next,list2);
+        }else{
+            p=list2;
+            p.next=Merge(list2.next,list1);
+        }
+        return p;
+    }
+}
+输入两个链表，找出它们的第一个公共结点。
+import java.util.HashMap;
+public class Solution {
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+ 		HashMap<ListNode,Integer> map=new HashMap<ListNode,Integer>();
+        while(pHead1!=null){
+            map.put(pHead1,null);
+            pHead1=pHead1.next;
+        }
+        while(pHead2!=null){
+            if(map.containsKey(pHead2)){
+                return pHead2;
+                }
+             pHead2=pHead2.next;
+        }  
+        return null;
+    }
+}
+
+树及二叉树
+重建二叉树
+输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+public class Solution {
+    public TreeNode reConstructBinaryTree(int [] pre,int [] in) {
+         TreeNode root=reConstructBinaryTree(pre,0,pre.length-1,in,0,in.length-1);
+        return root;
+    }
+    //前序遍历{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}
+    private TreeNode reConstructBinaryTree(int [] pre,int startPre,int endPre,int [] in,int startIn,int endIn) {
+          
+        if(startPre>endPre||startIn>endIn)
+            return null;
+        TreeNode root=new TreeNode(pre[startPre]);
+          
+        for(int i=startIn;i<=endIn;i++)
+            if(in[i]==pre[startPre]){
+                root.left=reConstructBinaryTree(pre,startPre+1,startPre+i-startIn,in,startIn,i-1);
+                root.right=reConstructBinaryTree(pre,i-startIn+startPre+1,endPre,in,i+1,endIn);
+            }
+                  
+        return root;
+    }
+}
+解题思路分析：前序遍历的第一个数字即为根节点的值，遍历中序遍历的序列值，找出根节点的值，则根节点左边的序列的则为左子树序列，假设有m个节点，根节点右边的序列则为右子树的序列，假设有n个节点。然后找出前序遍历的根节点后面的m个节点值即为左子树序列，再后面的n个节点值即为右子树序列。然后将按照同样的方法通过左子树和右子树的前序遍历序列和中序遍历序列将其分解，依次类推就能重建二叉树。
+
+输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+        if(root==null){
+            return 0;
+        }
+        int nleft=TreeDepth(root.left);
+        int nright=TreeDepth(root.right);
+        return nleft>nright?nleft+1:nright+1;
+    }
+}
+解题思路分析：如果一棵树只有一个节点，它的深度为1.如果根节点只有左子树，则它的深度为左子树的深度+1，如果根节点只有右子树，则它的深度为右子树的深度+1.如果既有左子树，又有右子树，则它的深度为左子树和右子树中深度较大值+1.
+
+输入两棵二叉树A，B，判断B是不是A的子结构
+public class Solution {
+    public boolean HasSubtree(TreeNode root1,TreeNode root2) {
+        boolean result = false;
+            if(root1 != null && root2 != null){
+                if(root1.val == root2.val){//遍历树1，如果发现某一节点A的值与树2的根节点的值相同则调用DoesTree1HaveTree2方法判断以A节点为根节点的子树是否与树2结构相同
+                    result = DoesTree1HaveTree2(root1,root2);
+                }
+
+               如果不相同则判断树2是否为树1左子树是的子树
+树2是否为树1右子树的子树
+ if(!result){result = HasSubtree(root1.left, root2);}
+if(!result){result = HasSubtree(root1.right, root2);}
+            }
+            return result;
+    }
+    public boolean DoesTree1HaveTree2(TreeNode root1,TreeNode root2){
+            if(root1 == null&& root2!=null) return false;//肯定不匹配
+            if(root2 == null) return true；//肯定匹配
+            if(root1.val != root2.val) return false;//肯定不匹配
+return DoesTree1HaveTree2(root1.left, root2.left) && DoesTree1HaveTree2(root1.right, root2.right);//继续判断它的左子树和右子树是否匹配
+        }
+}
+输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径
+import java.util.ArrayList;
+public class Solution {
+    private ArrayList<ArrayList<Integer>> listAll = new ArrayList<ArrayList<Integer>>();
+    private ArrayList<Integer> list = new ArrayList<Integer>();
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root,int target) {
+        if(root == null) return listAll;
+        list.add(root.val);
+        target -= root.val;
+        if(target == 0 && root.left == null && root.right == null)
+            listAll.add(new ArrayList<Integer>(list));
+        FindPath(root.left, target);
+        FindPath(root.right, target);
+        list.remove(list.size()-1);
+        return listAll;
+    }
+}
+当用前序遍历的方式访问到某一节点时，我们把该节点添加到路径上，并累加该节点的值，
+如果该节点为叶子节点并且路径中节点的累加值刚好等于输入的数值，则该条路径符合条件。并且开始寻找第二条路径是要将前一条路径的叶子节点删除。
+
+二叉搜索树的后序遍历
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+public class Solution {
+    public boolean VerifySquenceOfBST(int [] sequence) {
+        if(sequence.length==0){
+            return false;
+        }
+        return IsTreeBuild(sequence,0,sequence.length-1);
+    }
+        public boolean IsTreeBuild(int[] sequence,int start,int end){
+            if(end<=start){
+                return true;
+            }
+            int i=start;
+            for(;i<end;i++){
+                if(sequence[i]>sequence[end]){
+                     break; 
+                }
+           }
+            for(int j=i;j<end;j++){
+                       if(sequence[j]<sequence[end]){
+                           return false;
+                       }
+            }
+            return IsTreeBuild(sequence,start,i-1)&&IsTreeBuild(sequence,i,end-1);
+        }
+     
+}
+在后续遍历得到的序列中，最后一个数字是树的根节点的值。数组中前面的数字可以分为两部分：第一部分是左子树节点的值，他们都比根节点的值小；第二部分是右子树节点的值，他们都比根节点的值要大。接下来又可以用同样的方法来判断左右子树的结构。
+
+
+二叉搜索树与双向链表
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+解题思路：
+1.将左子树构造成双链表，并返回链表头节点。
+2.定位至左子树双链表最后一个节点。
+3.如果左子树链表不为空的话，将当前root追加到左子树链表。
+4.将右子树构造成双链表，并返回链表头节点。
+5.如果右子树链表不为空的话，将该链表追加到root节点之后。
+6.根据左子树链表是否为空确定返回的节点。
+public TreeNode Convert(TreeNode root) {
+if(root==null)
+return null;
+if(root.left==null&&root.right==null)
+return root;
+// 1.将左子树构造成双链表，并返回链表头节点
+TreeNode left = Convert(root.left);
+TreeNode p = left;
+// 2.定位至左子树双链表最后一个节点
+while(p!=null&&p.right!=null){
+p = p.right;
+}
+// 3.如果左子树链表不为空的话，将当前root追加到左子树链表
+if(left!=null){
+p.right = root;
+root.left = p;
+}
+// 4.将右子树构造成双链表，并返回链表头节点
+TreeNode right = Convert(root.right);
+// 5.如果右子树链表不为空的话，将该链表追加到root节点之后
+if(right!=null){
+right.left = root;
+root.right = right;
+}
+return left!=null?left:root; 
+}
+最小的K个数
+import java.util.*;
+public class Solution {
+    public ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
+          Arrays.sort(input);
+       		ArrayList list = new ArrayList();
+    		if(input.length<k)
+     		return list;
+        	for(int i=0;i<k;i++)
+            {
+            	list.add(input[i]);
+        	}
+        return list;
+    }
+}
+
+栈：先进后出
+栈的压入弹出序列
+输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序
+import java.util.Stack;
+public class Solution {
+    public boolean IsPopOrder(int [] pushA,int [] popA) {
+        if(pushA.length==0||popA.length==0)
+        {
+            return false;
+        }
+   
+        Stack<Integer> stack = new Stack<Integer>();
+        int j=0;
+        for(int i=0;i<pushA.length;i++){
+            stack.push(pushA[i]);
+        
+        while(j<popA.length&&stack.peek()==popA[j]){
+            stack.pop();
+            j++;
+            }
+          }
+        return stack.isEmpty();
+    }
+}
+
+建立一个辅助栈，将其中一个序列压入这个栈，再从栈中弹出依次比较元素是否相同。
+
+包含min函数的栈
+通过栈中的Iterator方法将栈进行遍历，找出最小的那个元素。
+import java.util.Stack;
+import java.util.Iterator;
+public class Solution {
+Stack<Integer> stack=new Stack<Integer>();
+    public void push(int node) {
+        stack.push(node);
+    }
+    
+    public void pop() {
+        stack.pop();
+    }
+    
+    public int top() {
+        return stack.peek();
+    }
+    
+    public int min() {
+        int temp=0;
+        int min=stack.peek();
+        Iterator<Integer> iterator=stack.iterator();
+        while(iterator.hasNext()){
+            temp=iterator.next();
+            if(temp<min){
+                min=temp;
+            }
+        }
+        return min;
+    }
+}
+
+
+从上往下打印二叉树
+public class Solution {
+    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
+        	ArrayList<Integer> list=new ArrayList<Integer>();
+        	if(root==null){
+                return list;
+            }
+        	Deque<TreeNode> deque=new LinkedList<TreeNode>();
+        	deque.add(root);
+        	while(!deque.isEmpty()){
+                TreeNode t=deque.pop();
+                list.add(t.val);
+                if(t.left!=null){
+                    deque.add(t.left);
+                }
+                if(t.right!=null){
+                    deque.add(t.right);
+                }
+            }
+        return list;
+    }
+}
+
+用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型
+import java.util.Stack;
+
+public class Solution {
+    Stack<Integer> stack1 = new Stack<Integer>();
+    Stack<Integer> stack2 = new Stack<Integer>();
+    
+    public void push(int node) {
+        stack1.push(node);
+    }
+    
+    public int pop() {
+    	while(!stack1.isEmpty()){
+            stack2.push(stack1.pop());
+        }
+        int first=stack2.pop();
+        while(!stack2.isEmpty()){
+            stack1.push(stack2.pop());
+        }
+        return first;
+    }
+}
+现将元素压入栈一，然后将其从栈一弹出，再将从栈一弹出来的元素又压入栈二，此时从栈二弹出来的元素与从栈一中元素压入进去的次序正好相同，满足队列先进先出的特点
+
+}
+
+用Java写一个折半查找。
+答：折半查找，也称二分查找、二分搜索，是一种在有序数组中查找某一特定元素的搜索算法。如果中间元素正好是要查找的元素，则搜素过程结束；如果某一特定元素大于或者小于中间元素，则在数组大于或小于中间元素的那一半中查找，而且跟开始一样从中间元素开始比较。如果在某一步骤数组已经为空，则表示找不到指定的元素。这种搜索算法每一次比较都使搜索范围缩小一半，其时间复杂度是O(logN)。
+Public static int binarySearch(int[] x,int key,Comparator<T> comp){
+Int low=0;
+Int high=x.length-1;
+Int mid=(high+low)/2;
+While(low<=high){
+Cmp=comp.compare(x[mid],key)
+If(cmp<0){
+Low=mid+1;
+}else if(cmp>0){
+High=mid-1
+}else{
+Return mid；
+}
+}
+Return -1;
+}
+
+八大排序算法
+
+1.直接插入排序
+基本思想：在要排序的一组数中，假设前面(n-1)[n>=2] 个数已经是排
+好顺序的，现在要把第n个数插到前面的有序数中，使得这n个数
+也是排好顺序的。如此反复循环，直到全部排好顺序。
+Public static void insertsort(int[] array){
+For(int i=1;i<array.length;i++){
+Int temp=array[i]
+Int j=i-1
+For(;j>=0&&array[j]>temp;j-- ){
+Array[j+1]=array[j];
+
+}
+Array[j+1]=temp;
+}
+System.out.println(Array);
+}
+2.希尔排序
+先取一个正整数d1 < n, 把所有相隔d1的记录放一组，每个组内进行直接插入排序；然后d2 < d1，重复上述分组和排序操作；直至di = 1，即所有记录放进一个组中排序为止。
+public static void shellSort(int[] array){
+Int gap=1;
+int len=array.length;
+while(gap<len/3){
+gap=gap*3+1;
+}
+for(;gap>0;gap/3){
+for(int i=gap;i<len;i++){
+Int temp=array[i];
+int j=i-gap;
+for(;j>=0&&array[j]>temp;j-=gap){
+array[j+gap]=arr[j];
+}
+array[j+gap]=temp;;
+}
+}
+}
+3. 简单选择排序
+基本思想：在要排序的一组数中，选出最小的一个数与第一个位置的数交换；
+然后在剩下的数当中再找最小的与第二个位置的数交换，如此循环到倒数第二个数和最后一个数比较为止。
+Pubic  static  void  selectSort(int[] array){
+For(int i=0;i<array.length;i++){
+Int temp=array[i];
+Int Position=i;
+int j=i+1;
+For(;j<array.length;j++){
+If(array[j]<temp){
+Temp=array[j];
+Position=j;
+}
+}
+Array[position]=array[i];
+Array[i]=temp;
+}
+System.out.println(Arrays.toString(array)+”selectsort”);
+}
+
+
+
+4.堆排序
+Public static void swap(int[] arr,int i,int j){
+Int temp=arr[i];
+Arr[i]=arr[j];
+Arr[j]=temp;
+}
+Public static int createmaxheap(int[] data,int lastindex){
+For(int i=(lastindex-1)/2;i>=0;i--){
+Int k=i;
+While(2*k+1<=lastindex){
+Int bigindex=2*k+1;
+If(bigindex<lastindex){
+If(data[bigindex]<data[bigindex+1]){
+Bigindex++;
+}
+If(data[k]<data[bigindex]){
+Swap(data,k,bigindex);
+Int k=bigindex;
+}else{
+Break;
+}
+}
+
+}
+}
+Public static int heapsort(int[] data){
+For(int i=0;i<=data.length;i++){
+Createmaxheap(data,data.length-i+1);
+Swap(data,0,data.length-i+1);
+}
+Return data;
+}
+}
+5. 冒泡排序
+基本思想：在要排序的一组数中，对当前还未排好序的范围内的全部数，自上而下对相邻的两个数依次进行比较和调整，让较大的数往下沉，较小的往上冒。
+Public static void bubbleSort(int[] array){
+Int temp=0;
+For(int i=0;i<array.length;i++){
+For(int j=0;j<array.length-i-1;j++){
+If(array[j]>array[j+1]){
+Temp=array[j+1];
+Array[j+1]=ayyay[j];
+Array[j]=temp;
+}
+}
+}
+}
+6. 快速排序
+基本思想：选择一个基准元素,通常选择第一个元素或者最后一个元素,通过一趟扫描，将待排序列分成两部分,一部分比基准元素小,一部分大于等于基准元素,此时基准元素在其排好序后的正确位置,然后再用同样的方法递归地排序划分的两部分。
+public static void quickSort(int[] array){
+_quickSort(array,0,array.length-1);
+}
+private static void _quickSort(int[] list,int low,int high){
+if(low<high){
+int middle=getmiddle(list,low,high);
+_quickSort(list,low,middle-1);
+_quickSort(list,middle+1,high);
+}
+}
+private static void getmiddle(int[] list,int low,int high){
+int temp=list[low];
+while(low<high){
+while(low<high&&list[high]>temp){
+high--;
+}
+list[low]=list[high];
+while(low<high&&list[low]<temp){
+low++;
+}
+list[high]=list[low];
+}
+list[low]=temp;
+return low;
+}
+
+Public static void sort(int[] arr){
+Sort(arr,0,arr.length-1)
+}
+Public static void sort(int[] arr,int low,int high){
+If(low<high){
+Int middle=getMiddle(arr,low,high);
+Sort(arr,low,middle);
+Sort(arr,middle+1;high);
+}
+}
+Public static void getMiddle(int[] arr,int low,int high){
+Int temp=arr[low];
+While(low<high){
+While(low<high&&arr[high]>temp){
+High--;
+}
+Arr[low]=arr[high];
+While(low<high&&arr[low]<temp){
+Low++;
+}
+Arr[high]=arr[low];
+}
+Arr[low]=temp;
+Return low;
+}
+7、归并排序
+即把待排序序列分为若干个子序列，每个子序列是有序的。然后再把有序子序列合并为整体有序序列。
+public static void mergingSort(int[] array){
+Sort(array,0,array.length-1);
+}
+private static void Sort(int[] data,int left,int right){
+if(left<right){
+int center=(left+right)/2;
+Sort(data,left,center);
+Sort(data,center+1,right);
+merge(data,left,center,right);
+}
+}
+
+private static void merge(int[] data,int left,int center,int right){
+int[] temparr=new int[data.length];
+int third=left;
+int temp=left;
+int mid=center+1;
+while(left<=mid&&mid<=right){
+if(data[left]<data[mid]){
+temparr[third++]=data[left++];
+}else{
+temparr[third++]=data[mid++];
+}
+}
+while(left<mid){
+temparr[third++]=data[left++];
+}
+while(mid<right){
+temparr[third++]=data[right++];
+}
+while(temp<=right){
+data[temp]=temparr[temp++];
+}
+}
+
+
+
+
+Public static void sort(int[] arr){
+Sort(arr,0,arr.length);
+}
+Public static void sort(int[] arr,int low,int high){
+If(low<high){
+Int center=(low+high)/2;
+Sort(arr,low,center);
+Sort(arr,center+1,high);
+Merge(arr,low,center,high);
+}
+}
+Public static void merge(int[] arr,in low,int center,int high){
+int[] temparr=new int[arr.length];
+Int mid=center+1;
+Int third=left;
+Int temp=left;
+While(low<center&&mid<high){
+If(arr[low]<arr[mid]){
+Temparr[third++]=arr[low++];
+}else(
+Temparr[third++]=arr[mid++];
+)
+}
+While(low<center){
+Temparr[third++]=arr[low++];
+}
+While(mid<high){
+Temparr[third++]=arr[mid++];
+}
+While(temp<right){
+data[temp]=temparr[temp++];
+}
+}
+
+判断一个链表是否有环
+public class Solution {
+
+    public ListNode EntryNodeOfLoop(ListNode pHead)
+    {
+        if(pHead==null||pHead.next==null){
+            return null;
+        }
+        ListNode p1=pHead;
+        ListNode p2=pHead;
+        while(p2!=null&&p2.next!=null){
+            p1=p1.next;
+            p2=p2.next.next;
+        if(p1==p2){
+            p1=pHead;
+        	while(p1!=p2){
+                p1=p1.next;
+                p2=p2.next;
+            }
+        if(p1==p2){
+            return p1;
+        }
+       }
+        	
+    }
+        return null;
+    }
+}
+1.第一步，找环中相汇点。分别用p1，p2指向链表头部，p1每次走一步，p2每次走二步，直到p1==p2找到在环中的相汇点。
+2.第二步，找环的入口。接上步，当p1==p2时，p2所经过节点数为2x,p1所经过节点数为x,设环中有n个节点,p2比p1多走一圈有2x=n+x; n=x;可以看出p1实际走了一个环的步数，再让p1指向链表头部，p2位置不变，p1,p2每次走一步直到p1==p2; 此时p1指向环的入口。
