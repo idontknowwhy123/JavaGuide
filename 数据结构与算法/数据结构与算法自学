@@ -535,20 +535,22 @@ https://blog.csdn.net/u010452388/java/article/details/81283998
 
 5. 冒泡排序
 基本思想：在要排序的一组数中，对当前还未排好序的范围内的全部数，自上而下对相邻的两个数依次进行比较和调整，让较大的数往下沉，较小的往上冒。
-Public static void bubbleSort(int[] array){
-Int temp=0;
-For(int i=0;i<array.length;i++){
-For(int j=0;j<array.length-i-1;j++){
-If(array[j]>array[j+1]){
-Temp=array[j+1];
-Array[j+1]=ayyay[j];
-Array[j]=temp;
-}
-}
-}
-}
+ public static void bubbleSort(int[] arr){
+        for (int i = 0;i < arr.length;i++) {
+            for (int j = 0;j < arr.length-i-1;j++) {
+                if (arr[j] > arr[j+1]) {
+                    int temp = arr[j+1];
+                    arr[j+1] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+    }
+    
+    
 6. 快速排序
-基本思想：选择一个基准元素,通常选择第一个元素或者最后一个元素,通过一趟扫描，将待排序列分成两部分,一部分比基准元素小,一部分大于等于基准元素,此时基准元素在其排好序后的正确位置,然后再用同样的方法递归地排序划分的两部分。
+基本思想：选择一个基准元素,通常选择第一个元素或者最后一个元素,通过一趟扫描，将待排序列分成两部分,一部分比基准元素小,一部分大于等于基准元素,
+此时基准元素在其排好序后的正确位置,然后再用同样的方法递归地排序划分的两部分。
 public static void quickSort(int[] array){
 _quickSort(array,0,array.length-1);
 }
