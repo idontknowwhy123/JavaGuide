@@ -455,6 +455,11 @@ System.out.println(Arrays.toString(array)+”selectsort”);
 
 
 4.堆排序
+总结：
+1、首先将无需数组构造成一个大根堆（新插入的数据与其父结点比较）
+
+2、固定一个最大值，将剩余的数重新构造成一个大根堆，重复这样的过程
+
  //堆排序
     public static void heapSort(int[] arr) {
         //构造大根堆
