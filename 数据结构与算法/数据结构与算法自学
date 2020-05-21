@@ -435,23 +435,21 @@ array[j+gap]=temp;;
 3. 简单选择排序
 基本思想：在要排序的一组数中，选出最小的一个数与第一个位置的数交换；
 然后在剩下的数当中再找最小的与第二个位置的数交换，如此循环到倒数第二个数和最后一个数比较为止。
-Pubic  static  void  selectSort(int[] array){
-For(int i=0;i<array.length;i++){
-Int temp=array[i];
-Int Position=i;
-int j=i+1;
-For(;j<array.length;j++){
-If(array[j]<temp){
-Temp=array[j];
-Position=j;
-}
-}
-Array[position]=array[i];
-Array[i]=temp;
-}
-System.out.println(Arrays.toString(array)+”selectsort”);
-}
-
+ public   static  void  selectSort(int[] array){
+        for(int i=0;i<array.length;i++){
+            int temp = array[i];
+            int position = i;
+            int j = i+1;
+            for (;j<array.length;j++){
+                if(array[j]<temp){
+                    temp = array[j];
+                    position = j;
+                }
+            }
+            array[position] = array[i];
+            array[i] = temp;
+        }
+    }
 
 
 4.堆排序
@@ -551,57 +549,34 @@ https://blog.csdn.net/u010452388/java/article/details/81283998
 6. 快速排序
 基本思想：选择一个基准元素,通常选择第一个元素或者最后一个元素,通过一趟扫描，将待排序列分成两部分,一部分比基准元素小,一部分大于等于基准元素,
 此时基准元素在其排好序后的正确位置,然后再用同样的方法递归地排序划分的两部分。
-public static void quickSort(int[] array){
-_quickSort(array,0,array.length-1);
-}
-private static void _quickSort(int[] list,int low,int high){
-if(low<high){
-int middle=getmiddle(list,low,high);
-_quickSort(list,low,middle-1);
-_quickSort(list,middle+1,high);
-}
-}
-private static void getmiddle(int[] list,int low,int high){
-int temp=list[low];
-while(low<high){
-while(low<high&&list[high]>temp){
-high--;
-}
-list[low]=list[high];
-while(low<high&&list[low]<temp){
-low++;
-}
-list[high]=list[low];
-}
-list[low]=temp;
-return low;
-}
-
-Public static void sort(int[] arr){
-Sort(arr,0,arr.length-1)
-}
-Public static void sort(int[] arr,int low,int high){
-If(low<high){
-Int middle=getMiddle(arr,low,high);
-Sort(arr,low,middle);
-Sort(arr,middle+1;high);
-}
-}
-Public static void getMiddle(int[] arr,int low,int high){
-Int temp=arr[low];
-While(low<high){
-While(low<high&&arr[high]>temp){
-High--;
-}
-Arr[low]=arr[high];
-While(low<high&&arr[low]<temp){
-Low++;
-}
-Arr[high]=arr[low];
-}
-Arr[low]=temp;
-Return low;
-}
+    public static void quickSort(int[] array){
+        _quickSort(array,0,array.length-1);
+    }
+    
+    private static void _quickSort(int[] list,int low,int high){
+        if (low < high){
+            int middle = getmiddle(list,low,high);
+            _quickSort(list,low,middle-1);
+            _quickSort(list,middle+1,high);
+        }
+    }
+    
+    private static int getmiddle(int[] list,int low,int high){
+        int temp = list[low];
+        while (low<high){
+            while (low<high && list[high]>temp){
+                high--;
+            }
+            list[low] = list[high];
+            while(low<high && list[low]<temp){
+                low++;
+            }
+            list[high] = list[low];
+        }
+        list[low] = temp;
+        return low;
+    }
+    
 7、归并排序
 即把待排序序列分为若干个子序列，每个子序列是有序的。然后再把有序子序列合并为整体有序序列。
 public static void mergingSort(int[] array){
