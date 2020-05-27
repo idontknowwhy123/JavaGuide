@@ -579,77 +579,41 @@ https://blog.csdn.net/u010452388/java/article/details/81283998
     
 7、归并排序
 即把待排序序列分为若干个子序列，每个子序列是有序的。然后再把有序子序列合并为整体有序序列。
-public static void mergingSort(int[] array){
-Sort(array,0,array.length-1);
-}
-private static void Sort(int[] data,int left,int right){
-if(left<right){
-int center=(left+right)/2;
-Sort(data,left,center);
-Sort(data,center+1,right);
-merge(data,left,center,right);
-}
-}
+  public void mergeSort(int[] arr) {
+            sort(arr,0,arr.length-1);
+        }
+        public void sort(int[] arr,int low,int high) {
+            if (low < high){
+                int middle = (low + high)/2;
+                sort(arr,low,middle);
+                sort(arr,middle+1,high);
+                _mergeSort(arr,low,middle,high);
+            }
+        }
 
-private static void merge(int[] data,int left,int center,int right){
-int[] temparr=new int[data.length];
-int third=left;
-int temp=left;
-int mid=center+1;
-while(left<=mid&&mid<=right){
-if(data[left]<data[mid]){
-temparr[third++]=data[left++];
-}else{
-temparr[third++]=data[mid++];
-}
-}
-while(left<mid){
-temparr[third++]=data[left++];
-}
-while(mid<right){
-temparr[third++]=data[right++];
-}
-while(temp<=right){
-data[temp]=temparr[temp++];
-}
-}
+        public void _mergeSort(int[] arr,int low,int middle,int high){
+            int[] tempArr = new int[arr.length];
+            int third = low;
+            int temp = low;
+            int center = middle + 1;
+            while (low < high){
+                if(arr[low] < arr[center]) {
+                    tempArr[third++] = arr[low];
+                } else {
+                    tempArr[third++] = arr[center++];
+                }
+            }
+            while (low < center) {
+                tempArr[third++] = arr[low++];
+            }
+            while (center < high) {
+                tempArr[third++] = arr[center++];
+            }
+            while (temp < high) {
+                arr[temp++] = tempArr[temp++];
+            }
+        }
 
-
-
-
-Public static void sort(int[] arr){
-Sort(arr,0,arr.length);
-}
-Public static void sort(int[] arr,int low,int high){
-If(low<high){
-Int center=(low+high)/2;
-Sort(arr,low,center);
-Sort(arr,center+1,high);
-Merge(arr,low,center,high);
-}
-}
-Public static void merge(int[] arr,in low,int center,int high){
-int[] temparr=new int[arr.length];
-Int mid=center+1;
-Int third=left;
-Int temp=left;
-While(low<center&&mid<high){
-If(arr[low]<arr[mid]){
-Temparr[third++]=arr[low++];
-}else(
-Temparr[third++]=arr[mid++];
-)
-}
-While(low<center){
-Temparr[third++]=arr[low++];
-}
-While(mid<high){
-Temparr[third++]=arr[mid++];
-}
-While(temp<right){
-data[temp]=temparr[temp++];
-}
-}
 
 判断一个链表是否有环
 public class Solution {
