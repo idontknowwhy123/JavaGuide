@@ -145,6 +145,8 @@ JDK1.6 对锁的实现引入了大量的优化，如偏向锁、轻量级锁、�
 
 大部分情况下，上面的原则都是没有问题的，但是如果一系列的连续操作都对同一个对象反复加锁和解锁，那么会带来很多不必要的性能消耗。
 
+https://blog.csdn.net/lengxiao1993/article/details/81568130
+
 ###  Synchronized 和 ReenTrantLock 的对比
 
 
