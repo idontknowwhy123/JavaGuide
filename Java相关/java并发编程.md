@@ -191,3 +191,59 @@ http://www.importnew.com/30150.html
          CountDownLatch.await()调用AQS的tryAcquireShared方法判断计数器的值是否减为了0，如果为0则退出死循环，否则则一直循环下去，从而达到阻塞当前
          线程的效果
          
+10.volatile没有原子性举例：AtomicInteger自增
+例如你让一个volatile的integer自增（i++），其实要分成3步：1）读取volatile变量值到local； 2）增加变量的值；3）把local的值写回，让其它的线程可见。这3步的jvm指令为：
+mov   0xc(%r10),%r8d ; Load
+inc    %r8d           ; Increment
+mov    %r8d,0xc(%r10) ; Store
+lock addl $0x0,(%rsp) ; StoreLoad Barrier
+注意最后一步是内存屏障。    
+
+什么是内存屏障（Memory Barrier）？
+内存屏障（memory barrier）是一个CPU指令。基本上，它是这样一条指令： a) 确保一些特定操作执行的顺序； b) 影响一些数据的可见性(可能是某些指令执行后的结果)。编译器和CPU可以在保证输出结果一样的情况下对指令重排序，使性能得到优化。插入一个内存屏障，相当于告诉CPU和编译器先于这个命令的必须先执行，后于这个命令的必须后执行。内存屏障另一个作用是强制更新一次不同CPU的缓存。例如，一个写屏障会把这个屏障前写入的数据刷新到缓存，这样任何试图读取该数据的线程将得到最新值，而不用考虑到底是被哪个cpu核心或者哪颗CPU执行的。
+
+内存屏障（memory barrier）和volatile什么关系？上面的虚拟机指令里面有提到，如果你的字段是volatile，Java内存模型将在写操作后插入一个写屏障指令，在读操作前插入一个读屏障指令。这意味着如果你对一个volatile字段进行写操作，你必须知道：1、一旦你完成写入，任何访问这个字段的线程将会得到最新的值。2、在你写入前，会保证所有之前发生的事已经发生，并且任何更新过的数据值也是可见的，因为内存屏障会把之前的写入值都刷新到缓存。
+
+volatile为什么没有原子性?
+明白了内存屏障（memory barrier）这个CPU指令，回到前面的JVM指令：从Load到store到内存屏障，一共4步，其中最后一步jvm让这个最新的变量的值在所有线程可见，也就是最后一步让所有的CPU内核都获得了最新的值，但中间的几步（从Load到Store）是不安全的，中间如果其他的CPU修改了值将会丢失。下面的测试代码可以实际测试voaltile的自增没有原子性：
+
+ private static volatile long _longVal = 0;
+     
+    private static class LoopVolatileimplements Runnable {
+        public void run() {
+            long val = 0;
+            while (val < 10000000L) {
+                _longVal++;
+                val++;
+            }
+        }
+    }
+     
+    private static class LoopVolatile2implements Runnable {
+        public void run() {
+            long val = 0;
+            while (val < 10000000L) {
+                _longVal++;
+                val++;
+            }
+        }
+    }
+     
+    private  void testVolatile(){
+        Thread t1 = new Thread(new LoopVolatile());
+        t1.start();
+         
+        Thread t2 = new Thread(new LoopVolatile2());
+        t2.start();
+         
+        while (t1.isAlive() || t2.isAlive()) {
+        }
+ 
+        System.out.println("final val is: " + _longVal);
+    }
+ 
+Output:-------------
+     
+final val is: 11223828
+final val is: 17567127
+final val is: 12912109
