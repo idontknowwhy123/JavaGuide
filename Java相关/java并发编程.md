@@ -168,7 +168,42 @@ ConcurrentLinkedQueue入队和出队操作均利用CAS（compare and set）更�
 4.Thread.interrupt()
 https://blog.csdn.net/tianyuxingxuan/article/details/76222935
 https://www.cnblogs.com/skywang12345/p/3479949.html
+4.1通过中断的方式终止处于“阻塞状态”的线程
+当线程由于被调用了sleep(), wait(), join()等方法而进入阻塞状态；若此时调用线程的interrupt()将线程的中断标记设为true。由于处于阻塞状态，中断标记会被清除，同时产生一个InterruptedException异常。将InterruptedException放在适当的为止就能终止线程，形式如下：
+public void run() {
+    try {
+        while (true) {
+            // 执行任务...
+        }
+    } catch (InterruptedException ie) {  
+        // 由于产生InterruptedException异常，退出while(true)循环，线程终止！
+    }
+}
+说明：在while(true)中不断的执行任务，当线程处于阻塞状态时，调用线程的interrupt()产生InterruptedException中断。中断的捕获在while(true)之外，这样就退出了while(true)循环！
 
+4.2终止处于"运行状态"下的线程
+  (01) 通过“中断标记”终止线程。
+  public void run() {
+    while (!isInterrupted()) {
+        // 执行任务...
+     }
+  }
+  说明：isInterrupted()是判断线程的中断标记是不是为true。当线程处于运行状态，并且我们需要终止它时；可以调用线程的interrupt()方法，使用线程的中断标   记为true，即isInterrupted()会返回true。此时，就会退出while循环。
+  
+  (02) 通过“额外添加标记”
+   private volatile boolean flag= true;
+   protected void stopTask() {
+      flag = false;
+   }
+
+   @Override
+   public void run() {
+     while (flag) {
+        // 执行任务...
+     }
+  }
+ 说明：线程中有一个flag标记，它的默认值是true；并且我们提供stopTask()来设置flag标记。当我们需要终止该线程时，调用该线程的stopTask()方法就可以让线  程退出while循环。
+ 
 5.ThreadLocal
 https://www.cnblogs.com/dolphin0520/p/3920407.html
 
