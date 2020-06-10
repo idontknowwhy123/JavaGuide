@@ -207,6 +207,7 @@ public void run() {
  
 5.ThreadLocal
 https://www.cnblogs.com/dolphin0520/p/3920407.html
+https://www.cnblogs.com/aspirant/p/8991010.html
 
 6.ReentranLock
 https://blog.csdn.net/u011521203/article/details/80186741
