@@ -97,8 +97,8 @@ ConcurrentLinkedQueue的线程安全是通过其插入、删除时采取CAS操�
 JDK7提供了7个阻塞队列。分别是<br>
 ArrayBlockingQueue ：一个由数组结构组成的有界阻塞队列。<br>
 LinkedBlockingQueue ：一个由链表结构组成的有界阻塞队列。<br>
-PriorityBlockingQueue ：一个支持优先级排序的无界阻塞队列。<br>
-DelayQueue：一个使用优先级队列实现的无界阻塞队列。<br>
+PriorityBlockingQueue ：一个支持优先级的无界阻塞队列。<br>
+DelayQueue：一个延时获取元素的无界阻塞队列。<br>
 SynchronousQueue：一个不存储元素的阻塞队列。<br>
 LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。<br>
 LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。<br>
