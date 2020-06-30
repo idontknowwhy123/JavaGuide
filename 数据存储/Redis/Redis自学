@@ -1,5 +1,8 @@
 一.redis缓存穿透以及解决方案
 https://www.cnblogs.com/lingyejun/p/10087135.html
+1.缓存空对象
+
+2.布隆过滤器拦截
 
 2.布隆过滤器的原理
 https://www.jianshu.com/p/2104d11ee0a2
