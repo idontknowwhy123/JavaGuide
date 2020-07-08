@@ -151,3 +151,17 @@ https://blog.csdn.net/clypm/article/details/80618036
 https://www.cnblogs.com/qizhelongdeyang/p/7355309.html
 
 -
+
+一.kafka生产者
+生产者发送消息的步骤：
+1.1创建ProducerRecord对象，这个对象封装了主题和数据，也可以包含键以及分区
+1.2将键以及值通过序列化器进行序列化，
+1.3如果没有指定分区，分区器会根据键采用默认散列算法来选择一个分区，如果没有键则采用轮询算法来选择分区
+1.4这条记录将被添加到一个记录批次中，由一个线程将该批次的消息发送到broker中
+1.5服务器收到消息时会返回一个响应，如果写入kafka成功，则返回一个RecordMetaData对象（包含主题，分区以及偏移量相关信息）
+1.6如果写入失败，则会返回一个错误，生产者在收到错误之后会尝试重新发送消息。
+
+kafka生产者有三个必选属性
+bootstrap.servers:broke
+
+
