@@ -35,7 +35,7 @@ IOC总结：
  依赖注入:传统Java SE程序设计，我们直接在对象内部通过new进行创建对象，是程序主动去创建依赖对象；而IoC是有专门一个容器来创建这些对象，即由Ioc容器来控制对象的创建
  优点：传统应用程序都是由我们在类内部主动创建依赖对象，从而导致类与类之间高耦合；有了IoC容器后，把创建和查找依赖对象的控制权交给了容器，由容器进行注入组合对象，所以对象与对象之间是松耦合
 
-二、 Spring的生命周期
+二、 Spring bean的生命周期
 1.首先会先进行实例化bean对象
 2.然后是进行对bean的属性进行设置
 3.接着是对BeanNameAware（其实就是为了让Spring容器来获取bean的名称）、BeanFactoryAware（让bean的BeanFactory调用容器的服务）、ApplicationContextAware（让bean当前的applicationContext可以来取调用Spring容器的服务）
