@@ -1,6 +1,6 @@
 1.Spring FactoryBean和BeanFactory 区别
 BeanFactory是个bean 工厂，是一个工厂类(接口)， 它负责生产和管理bean的一个工厂
-是ioc 容器最底层的接口，是个ioc容器，是spring用来管理和装配普通bean的ioc容器（这些bean成为普通bean）。
+是ioc容器最底层的接口，是个ioc容器，是spring用来管理和装配普通bean的ioc容器（这些bean成为普通bean）。
 
 FactoryBean是个bean，在IOC容器的基础上给Bean的实现加上了一个简单工厂模式和装饰模式，是一个可以生产对象和装饰对象的工厂bean，由spring管理后，
 生产的对象是由getObject()方法决定的（从容器中获取到的对象不是“ FactoryBeanTest ” 对象）。
@@ -27,3 +27,59 @@ Spring、SpringBoot、SpringMVC 的区别
 SpringBoot 的启动流程
 Bean 的生命周期
 SpringMVC 的流程
+
+
+IOC总结：
+1、IOC容器的初始化过程：包括BeanDefinition的Resource（Bean的定义信息）定位、载入、和注册三个基本过程
+   1.Resource定位：BeanDefinition的资源定位.
+   2.BeanDefinition的载入：将定义好的Bean表示成IOC容器的内部数据结构，这个内部的数据结构就是BeanDefinition
+   3.向IOC容器注册BeanDefinition:其实就是将BeanDefinition注入到一个HashMap中去
+
+ 依赖注入:传统Java SE程序设计，我们直接在对象内部通过new进行创建对象，是程序主动去创建依赖对象；而IoC是有专门一个容器来创建这些对象，即由Ioc容器来控制对象的创建
+ 优点：传统应用程序都是由我们在类内部主动创建依赖对象，从而导致类与类之间高耦合；有了IoC容器后，把创建和查找依赖对象的控制权交给了容器，由容器进行注入组合对象，所以对象与对象之间是松耦合
+
+二、Spring的生命周期
+1.首先会先进行实例化bean对象
+2.然后是进行对bean的属性进行设置
+3.接着是对BeanNameAware（其实就是为了让Spring容器来获取bean的名称）、BeanFactoryAware（让bean的BeanFactory调用容器的服务）、ApplicationContextAware（让bean当前的applicationContext可以来取调用Spring容器的服务）
+4.然后是实现BeanPostProcessor 这个接口中的两个方法，主要是对调用接口的前置初始化postProcessBeforeInitialization
+5.这里是主要是对xml中自己定义的初始化方法 init-method = “xxxx”进行调用
+6.然后是继续对BeanPostProcessor 这个接口中的后置初始化方法进行一个调用postProcessAfterInitialization（）
+7.其实到这一步，基本上这个bean的初始化基本已经完成，就处于就绪状态
+8.然后就是当Spring容器中如果使用完毕的话，就会调用destory（）方法
+9.最后会去执行我们自己定义的销毁方法来进行销毁，然后结束生命周期
+
+
+三、Spring bean加载的过程
+ 1.beanName转化
+  1.1别名
+  1.2如果是一个工厂bean，需要将&去掉
+ 2.从缓存中获取实例对象
+ 3.没有获取到则合并父类的BeanDefinition
+ 4.创建bean实例对象
+  这里有三种构造 bean 对象的方式，如下：
+  通过“工厂方法”的方式构造 bean 对象
+  通过“构造方法自动注入”的方式构造 bean 对象
+  通过“默认构造方法”的方式构造 bean 对象
+5.应用MergedBeanDefinitionPostProcessor后置处理器相关逻辑
+6.根据条件决定是否提前暴露 bean 的早期引用（early reference），用于处理循环依赖问题
+7.调用 populateBean 方法向 bean 实例中填充属性
+8.调用 initializeBean 方法完成余下的初始化工作
+
+四、spring容器的bean什么时候被实例化？
+（1）如果你使用BeanFactory作为Spring Bean的工厂类，则所有的bean都是在第一次使用该Bean的时候实例化
+
+（2）如果你使用ApplicationContext作为Spring Bean的工厂类，则又分为以下几种情况：
+
+如果bean的scope是singleton的，并且lazy-init为false（默认是false，所以可以不用设置），则 ApplicationContext启动的时候就实例化该Bean，并且将实例化的Bean放在一个map结构的缓存中，下次再使 用该 Bean的时候，直接从这个缓存中取
+如果bean的scope是singleton的，并且lazy-init为true，则该Bean的实例化是在第一次使用该Bean的时候进行实例化
+如果bean的scope是prototype的，则该Bean的实例化是在第一次使用该Bean的时候进行实例化
+
+五、Sring中bean的作用域
+Spring IOC容器创建一个Bean实例时，可以为Bean指定实例的作用域，作用域包括singleton（单例模式）、prototype（原型模式）、request（HTTP请求）、session（会话）、global-session（全局会话）。
+
+六、Spring循环依赖
+问题：A依赖于B，B依赖于A，然后对象在进行实例化时就会出现循环依赖的死循环
+解决:提前暴露对象早期的引用
+     在创建完原始对象A之后判断该对象是否需要提前暴露早期引用，如果需要则将该A对应的早期引用进行缓存，然后开始获取依赖B实例，B实例在创建的过程在走到获取实例A时会从缓存中获取
+     之前实例A暴露的早期引用，这样实例B就正常初始化完成，实例也就跟着也初始化完成了。
