@@ -6,9 +6,6 @@ FactoryBean是个bean，在IOC容器的基础上给Bean的实现加上了一个�
 生产的对象是由getObject()方法决定的（从容器中获取到的对象不是“ FactoryBeanTest ” 对象）。
 
 
-第一部分：获取单例bean
-
-spring面试：
 
 spring
 spring的两大特性- ioc aop，实现原理
@@ -30,7 +27,7 @@ SpringMVC 的流程
 
 
 IOC总结：
-1、IOC容器的初始化过程：包括BeanDefinition的Resource（Bean的定义信息）定位、载入、和注册三个基本过程
+一、IOC容器的初始化过程：包括BeanDefinition的Resource（Bean的定义信息）定位、载入、和注册三个基本过程
    1.Resource定位：BeanDefinition的资源定位.
    2.BeanDefinition的载入：将定义好的Bean表示成IOC容器的内部数据结构，这个内部的数据结构就是BeanDefinition
    3.向IOC容器注册BeanDefinition:其实就是将BeanDefinition注入到一个HashMap中去
@@ -38,7 +35,7 @@ IOC总结：
  依赖注入:传统Java SE程序设计，我们直接在对象内部通过new进行创建对象，是程序主动去创建依赖对象；而IoC是有专门一个容器来创建这些对象，即由Ioc容器来控制对象的创建
  优点：传统应用程序都是由我们在类内部主动创建依赖对象，从而导致类与类之间高耦合；有了IoC容器后，把创建和查找依赖对象的控制权交给了容器，由容器进行注入组合对象，所以对象与对象之间是松耦合
 
-二、Spring的生命周期
+二、 Spring的生命周期
 1.首先会先进行实例化bean对象
 2.然后是进行对bean的属性进行设置
 3.接着是对BeanNameAware（其实就是为了让Spring容器来获取bean的名称）、BeanFactoryAware（让bean的BeanFactory调用容器的服务）、ApplicationContextAware（让bean当前的applicationContext可以来取调用Spring容器的服务）
@@ -50,7 +47,7 @@ IOC总结：
 9.最后会去执行我们自己定义的销毁方法来进行销毁，然后结束生命周期
 
 
-三、Spring bean加载的过程
+ 三、Spring bean加载的过程
  1.beanName转化
   1.1别名
   1.2如果是一个工厂bean，需要将&去掉
@@ -83,3 +80,45 @@ Spring IOC容器创建一个Bean实例时，可以为Bean指定实例的作用�
 解决:提前暴露对象早期的引用
      在创建完原始对象A之后判断该对象是否需要提前暴露早期引用，如果需要则将该A对应的早期引用进行缓存，然后开始获取依赖B实例，B实例在创建的过程在走到获取实例A时会从缓存中获取
      之前实例A暴露的早期引用，这样实例B就正常初始化完成，实例也就跟着也初始化完成了。
+
+七、Spring三种注入方式
+    1.构造器注入
+    2.setter方法注入
+    3.注解注入：
+      1.@Resource 默认按照byType进行注入，如果加了@Qualifier注解，则可按照byName进行注入
+
+      2.@Autowire 默认按照byName进行注入，也可以按照byType进行注入
+
+AOP总结：
+  一、相关术语
+     1.连接点：具体某个方法的调用
+     2.切点：对某个类的某个方法进行选择，包含类型过滤器和方法匹配器两个接口
+     3.通知：在方法前或者方法后执行某个具体逻辑
+       前置通知（Before advice）- 在目标方便调用前执行通知
+       后置通知（After advice）- 在目标方法完成后执行通知
+       返回通知（After returning advice）- 在目标方法执行成功后，调用通知
+       异常通知（After throwing advice）- 在目标方法抛出异常后，执行通知
+       环绕通知（Around advice）- 在目标方法调用前后均可执行自定义逻辑
+     4.切面(通知器)：切点+通知
+     5.织入：所谓织入就是在切点的引导下，将通知逻辑插入到方法调用上
+二、AOP的过程
+   1.筛选合适的通知器
+     1.1通过xml配置去查找相应的通知器
+        1.1.1从容器中查找所有类型为 Advisor 的 bean 对应的名称
+        1.1.2遍历 advisorNames，并从容器中获取对应的 bean
+     1.2通过@Aspect注解去查找响应的通知
+        1.2.1获取容器中所有 bean 的名称（beanName）
+        1.2.2遍历上一步获取到的 bean 名称数组，并获取当前 beanName 对应的 bean 类型（beanType）
+        1.2.3根据 beanType 判断当前 bean 是否是一个的 Aspect 注解类，若不是则不做任何处理
+        1.2.4调用 advisorFactory.getAdvisors 获取通知器（通知器就是构造通知+切点对象的过程）
+     1.3如果通知器数组不为空，则为 bean 生成代理对象，并返回该对象
+        1.3.1默认情况下 proxy-target-class 属性为 false。当目标 bean 实现了接口时，Spring 会基于 JDK 动态代理为目标 bean 创建代理对象
+             当proxy-target-class 属性设为 true 时，则会强制 Spring 通过 CGLIB 的方式创建代理对象，即使目标 bean 实现了接口。
+     1.4拦截器链的执行过程
+        expose-proxy 特性是为了解决目标方法调用同对象中其他方法时，其他方法的切面逻辑无法执行的问题
+        当 expose-proxy 被配置为 true 时，该代理对象会被放入 ThreadLocal 中  
+        
+        检测 expose-proxy 是否为 true，若为 true，则暴露代理对象
+        获取适合当前方法的拦截器（通过类型过滤器和方法匹配器进行过滤，然后将过滤出来的通知器转化为拦截器）
+        如果拦截器链为空，则直接通过反射执行目标方法
+        若拦截器链不为空，则执行拦截器链
