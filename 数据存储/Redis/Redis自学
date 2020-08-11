@@ -144,4 +144,18 @@ https://www.jianshu.com/p/06ab9daf921d
 https://blog.csdn.net/u012240455/article/details/81843714?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
 https://www.cnblogs.com/Eugene-Jin/p/10819601.html
 
+-### redis的hash一致算法
+     当数据量很大时，我们需要对redis进行分库分表操作，将数据均匀的分配到各个redis节点上。
+     1.随机分配：查询的时候需要遍历各个redis服务器进行查询，
+           缺陷：性能差
+     2.使用hash算法进行分配：假设有4台redis服务器，对数据的key进行hash算法的计算并对4求余从而确定某一台redis服务器
+                      缺陷：当redis服务器数量发生变化时，很多缓存的位置都会发生变化，也就是说很多缓存在某一定时间内是失效的，缓存数据失效，
+                            则会向后台数据库请求数据             
+     3.使用一致性hash算法进行分配：
+       3.1算法原理：1、一致性hash算法是对2^32-1取模，然后将整个Hash值控件组织成一个虚拟的圆环，构造成一个哈希环
+                   整个空间按照顺时针方向组织，圆环的正上方的点代表0,0点右侧第一个点代表1，直到2^32-1,
+                   2、接下来将服务器根据IP或者主机名使用一个哈希函数找到其环空间位置
+                   3、接下来使用数据的key根据相同的哈希函数定位到环上的某一位置，并从该位置开始，沿顺时针行走，遇到的第一个服务器就是存储该数据的服务器
+                    
+                                
 
