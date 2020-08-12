@@ -46,16 +46,15 @@ https://www.jianshu.com/p/2104d11ee0a2
   1.redis是基于内存的，内存的读写速度非常快；
   2.redis是单线程的，省去了很多上下文切换线程的时间；
   3.redis使用多路复用技术，可以处理并发的连接；
-  IO多路复用技术： 在同一个线程里面， 通过拨开关的方式，来同时传输多个I/O流
+  IO多路复用技术：指的其实是在单个线程通过记录跟踪每一个Sock(I/O流)的状态(对应空管塔里面的Fight progress strip槽)来同时管理多个I/O流
   epoll与select,poll的区别
   1.select:注册多个socket到select,然后循环遍历这些socket，一旦有数据到达，socket被激活,select函数返回。用户线程正式发起read请求，
   读取数据并继续执行
   
-  然而，使用select函数的优点并不仅限于此。虽然上述方式允许单线程内处理多个IO请求，但是每个IO请求的过程还是阻塞的（在select函数上阻塞），
-  平均时间甚至比同步阻塞IO模型还要长。如果用户线程只注册自己感兴趣的socket或者IO请求，然后去做自己的事情，等到数据到来时再进行处理，
-  则可以提高CPU的利用率。
+  缺点：每个IO请求过程还是阻塞的
+  epoll采用异步的方式来解决这种阻塞问题
   
-  2.epoll:通过Reactor的方式，可以将用户线程轮询IO操作状态的工作统一交给handle_events事件循环进行处理。
+  2.epoll:通过Reactor的方式，可以将用户线程轮询IO操作状态的工作统一交给Refactor线程进行处理，然后自己去处理自己的事情
   用户线程注册事件处理器之后可以继续执行做其他的工作（异步），而Reactor线程负责调用内核的select函数检查socket状态。当有socket被激活时，
   则通知相应的用户线程（或执行用户线程的回调函数），执行handle_event进行数据读取、处理的工作
   https://blog.csdn.net/Happy_wu/article/details/80052617?utm_medium=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-5.nonecase&depth_1-utm_source=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-5.nonecase
