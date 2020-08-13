@@ -144,7 +144,7 @@ https://www.cnblogs.com/qdhxhz/p/11046905.html
        1.1、从redis宕机
             从redis重启之后会自动加入到redis集群中，并主动从主机同步数据。
        1.2、主redis宕机
-            在从redis服务器中执行slave no one命令断开主动关系，并选举一个从服务器升级为主服务器
+            在从redis服务器中执行slave no one命令断开主从关系，并选举一个从服务器升级为主服务器
             将其他从服务器通过slave of命令设置为新的主服务器的从服务器
       
      2.哨兵机制的高可用
