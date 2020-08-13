@@ -138,10 +138,52 @@ https://blog.csdn.net/wuzhiwei549/article/details/80692278?utm_medium=distribute
 https://blog.csdn.net/shuangyueliao/article/details/89344256
 https://www.cnblogs.com/qdhxhz/p/11046905.html
 
-redis哨兵
-https://www.jianshu.com/p/06ab9daf921d
-https://blog.csdn.net/u012240455/article/details/81843714?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
-https://www.cnblogs.com/Eugene-Jin/p/10819601.html
+-### redis哨兵
+     1.为什么要用到哨兵？
+       哨兵主要是为了解决主从架构中出现宕机的情况：
+       1.1、从redis宕机
+            从redis重启之后会自动加入到redis集群中，并主动从主机同步数据。
+       1.2、主redis宕机
+            在从redis服务器中执行slave no one命令断开主动关系，并选举一个从服务器升级为主服务器
+            将其他从服务器通过slave of命令设置为新的主服务器的从服务器
+      
+     2.哨兵机制的高可用
+        2.1、哨兵机制是解决redis高可用的解决方案：一个哨兵系统由一个或多个哨兵组成，每个哨兵会监视各个redis主服务器以及其对应的从服务器，一旦某个主服务器宕机下线，
+             哨兵将会从该主服务器的从服务器中选举一个从服务器升级为主服务器
+        2.2、哨兵的定时监控
+             2.2.1、对redis集群信息的获取
+                    每个哨兵每隔10s会向主节点和从节点发送info命令获取整个集群的拓扑图
+             2.2.2、对主节点的判断
+                    每个哨兵每隔2s会向redis节点的指定频道发送主节点的判断以及当前哨兵的信息，其他哨兵都订阅了该频道，所以每个哨兵都能感知到其他哨兵对主节点的判断
+             2.2.3、判断节点是否宕机的依据
+                    每个哨兵每个1s会向主节点，从节点和其他哨兵发送一次ping命令做一次心跳检查
+         2.3、主观下线：
+              就是当个哨兵通过心跳检查机制判断某个节点不正常了，宕机了
+              
+              客观下线：当主观下线的节点是主节点，当前哨兵就会向其他哨兵发送指令通知其他哨兵去对该主节点进行判断，当有其他节点也认为该主节点不正常了，
+                        并且认为该主节点不正常的哨兵个数超过选举数量时，哨兵则认为该主节点是客观下线了
+                        
+         2.4、哨兵leader选举流程：
+              当某个哨兵判断某个主节点已经客观下线了，他将会向其他哨兵请求申请自己为故障转移的leader，其他哨兵收到请求之后可以选择同意和不同意
+              当同意的哨兵实例数量大于等于（哨兵数量/2+1）时，该哨兵将被选为哨兵leader进行故障转移
+              
+         2.5、故障转移机制
+              2.5.1、哨兵leader将按照如下规则从从节点中选举出新的主节点：
+                    1.排除下线的主节点
+                    2.选举slave-priority最高的从节点，如果有则返回没有则继续
+                    3.选举复制偏移量最大的节点，如果有就返回没有则继续
+                    4.选举run_id最小的节点
+                    
+              2.5.2、更新主从状态：
+                     1.首先通过slaveof no one命令让选举出来的从节点成为新的主节点，然后通过slave of命令让其他从节点成为该主节点的从节点
+                     2.将下线的主节点设置为新的主节点的从节点，当恢复正常时，重新从主节点复制数据
+                    
+           参考资料：
+           https://www.jianshu.com/p/06ab9daf921d
+           https://blog.csdn.net/u012240455/article/details/81843714?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
+           https://www.cnblogs.com/Eugene-Jin/p/10819601.html
+
+
 
 -### redis的hash一致算法
      当数据量很大时，我们需要对redis进行分库分表操作，将数据均匀的分配到各个redis节点上。
