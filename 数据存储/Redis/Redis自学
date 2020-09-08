@@ -131,12 +131,75 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
                  4.4、如果回收池未满，且索引位置k有元素，则将索引位置为k及以后的元素都向后移动一位，并在索引位置k插入该键
               
 
-redis分布式锁
-1.基于zoopkeeper的实现
-https://blog.csdn.net/wuzhiwei549/article/details/80692278?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1
-2.redission分布式锁原理及实现
-https://blog.csdn.net/shuangyueliao/article/details/89344256
-https://www.cnblogs.com/qdhxhz/p/11046905.html
+-###redis分布式锁
+  1.基于zoopkeeper的实现
+  https://blog.csdn.net/wuzhiwei549/article/details/80692278?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1
+  2.redission分布式锁原理及实现
+  RLock lock = redission.getLock("myLock");
+  lock.lock();
+  lock.unlock();
+  
+  2.1、加锁机制
+  客户端需要加锁，客户端会从集群中根据hash节点选择一台机器，然后发送一段lua脚本到redis上：
+  为啥要是有lua脚本?
+  为了保证这段复杂业务逻辑执行的原子性
+  "if (redis.call('exist',KEYS[1]) == 0) then " +
+      "redis.call('hset',KEYS[1],ARGV[2],1); " +
+      "redis.call('pexpire',KEYS[1],AGRV[1]); " +
+      "return nil; " +
+   "end; " +
+   if (redis.call('hexists',KEYS[1]),ARGV[2] == 1) then " +
+      "redis.call('hincrby',KEYS[1],ARGV[2],1); " +
+      "redis.call('pexpire',KEYS[1],AGRV[1]); " +
+      "return nil; " +
+   "end; " +
+   "return redis.call('pttl',KEYS[1]);"
+   其中，KEYS[1]代表加锁的key,例如RLock lock = redission.getLock("myLock");对应的锁key就是"myLock"
+   ARGV[1]代表的是锁默认的生存时间30S，AGRV[2]代表的是加锁的客户端ID
+   加锁步骤：
+     2.1.1、是否需要加锁？
+            第一行if语句就是用"exist myLock"命令判断一下，如果你要加锁的那个锁key不存在的话，你就进行加锁
+     2.1.2、如何加锁？
+            执行命令hset myLock 8743c9c0-0795-4907-87fd-6c719a6b4586:1 1,这个命令执行后，会设置一个hash数据结构
+            myLock:
+            {
+             "8743c9c0-0795-4907-87fd-6c719a6b4586:1" : 1
+            }
+            上述结果代表客户端8743c9c0-0795-4907-87fd-6c719a6b4586:1对myLock这个锁完成了一次加锁
+      2.1.3、设置超时时间
+             接着会执行"pexpire myLock 30000"命令，设置myLock这个锁的生存时间是30秒
+       
+    2.2、锁的互斥机制
+         如果这时又来了一个客户端2执行相同的lua脚本对myLock加锁
+      2.2.1、是否需要加锁？
+             第一行if语句用"exist myLock"命令判断一下，发现myLock这个锁已经存在了，就进入第二个判断
+      2.2.2、第二if语句判断是key为"myLock"的hash数据结构中是否包含客户端2，如果不包含，则进入第三个逻辑
+      2.2.3、然后客户端2会获取到pttl myLock返回的一个数字，这个数字代表myLock这个锁的剩余生存时间。
+      2.2.4、最后客户端2会进入一个while循环，不停的尝试加锁。
+      
+    2.3、watch dog自动延期机制
+         客户端1加锁的锁key默认的超时时间是30s，如果过了30s，客户端1还没有处理完业务，还需要继续持有这个锁，就可以开启一个watch dog
+         看门狗线程，这个线程会每隔10s检查一下，如果客户端1还持有锁的话，那么就会不断延长锁key的超时时间
+         
+    2.4、锁的可重入机制
+         客户端1已经持有了myLock锁，然后进行可重入的加锁
+         2.4.1、首先还是第一个if语句判断"myLock"这个锁是否存在，已经存在，则进入第二个判断
+         2.4.2、通过myLock这个锁的hash数据结构判断是否是客户端1持有了myLock锁，发现客户端1确实持有这把锁
+         2.4.3、接着就会执行incrby myLock 8743c9c0-0795-4907-87fd-6c71a6b4586:1 1命令将客户端1的加锁次数进行加1，这个时候的myLock
+                数据结构就是：
+                myLock:
+                {
+                 "8743c9c0-0795-4907-87fd-6c719a6b4586:1" : 2
+                }
+                其中客户端ID对应的就是加锁次数
+                
+     2.5、锁的释放机制
+          其实执行lock.unlock()就是释放锁，其底层实现就是每次对myLock对应的hash数据结构里面的加锁次数进行减一，当发现加锁次数是0了，
+          说明这个客户端已经不再持有锁了，此时就会执行"del myLock"命令，从redis里删除这个key
+          
+   
+   https://blog.csdn.net/shuangyueliao/article/details/89344256
+   https://www.cnblogs.com/qdhxhz/p/11046905.html
 
 -### redis的主从集群架构
   1、主从复制，读写分离：1个主服务器，多个从服务器，写入是对主服务器进行操作，并将写入指令同步到多个从服务器，读操作则是从从服务器中读取。
