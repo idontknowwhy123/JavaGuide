@@ -42,7 +42,7 @@ https://www.jianshu.com/p/2104d11ee0a2
 
 代码实现：https://blog.csdn.netwu/article/details/80052617?utm_medium=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-5.nonecase&depth_1-utm_source=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-5.nonecase
   
-五.redis的数据结构及使用场景
+-###五.redis的数据结构及使用场景
   1. String
 常用命令: set,get,decr,incr,mget 等。
 
@@ -84,7 +84,8 @@ sinterstore key1 key2 key3     将交集存在key1内
 举例： 在直播系统中，实时排行信息包含直播间在线用户列表，各种礼物排行榜，弹幕消息（可以理解为按消息维度的消息排行榜）等信息，适合使用 Redis 中的 SortedSet 结构进行存储
 
 
-六，redis的过期策略和数据淘汰策略
+-###六，redis的过期策略和数据淘汰策略
+
 Redis中有个设置时间过期的功能，即对存储在 redis 数据库中的值可以设置一个过期时间。作为一个缓存数据库，这是非常实用的。如我们一般项目中的 token 或者一些登录信息，尤其是短信验证码都是有时间限制的，按照传统的数据库处理方式，一般都是自己判断过期，这样无疑会严重影响项目性能。
 
 我们 set key 的时候，都可以给一个 expire time，就是过期时间，通过过期时间我们可以指定这个 key 可以存活的时间。
