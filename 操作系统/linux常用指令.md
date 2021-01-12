@@ -110,4 +110,7 @@ https://blog.csdn.net/z517602658/article/details/62076193
    2、：/ 查看某个关键字，N向下寻找，n向上寻找
    3、G直接到最后面
    4、直接输入100，定位到文件的第100行
+   
+21.查看某个历史命令
+   history |grep "curl"
 
