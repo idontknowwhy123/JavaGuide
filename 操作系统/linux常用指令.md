@@ -49,6 +49,8 @@ cd../../../../
 3.tar –xvf file.tar //解压 tar包
 
 4.unzip file.zip //解压zip
+  解压文件到指定目录
+  unzip /home/kms/kms.zip -d /home/kms/server/km
 
 如果出现这个提示：
 -bash: zip: command not found    不能执行ZIP压缩，是因为没有安装ZIP，
@@ -98,7 +100,14 @@ https://blog.csdn.net/z517602658/article/details/62076193
    
  19.查找某个文件
    find / -name test.java
+    
 
 20.查看某个端口占用情况
   netstat -anlp|grep "pid"
+  
+20.查看某个文件内容
+   1、vi ct.txt
+   2、：/ 查看某个关键字，N向下寻找，n向上寻找
+   3、G直接到最后面
+   4、直接输入100，定位到文件的第100行
 
