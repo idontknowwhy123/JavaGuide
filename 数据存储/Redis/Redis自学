@@ -272,7 +272,7 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
            
            
            
--### redis的主从集群架构
+-### redis的主从模式（1个主，多个从）
   1、主从复制，读写分离：1个主服务器，多个从服务器，写入是对主服务器进行操作，并将写入指令同步到多个从服务器，读操作则是从从服务器中读取。
   slaveof no one 让服务器终止复制操作，不再接受主服务器的更新。
   slaveof host port 让服务器复制主服务器的数据，成为该主服务器的从服务器
@@ -291,8 +291,14 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
      是否已经达到从服务器？ 在写入真正数据之后再写入一个唯一的虚构值，然后判断该需虚构值是否存在于从服务器中来判断是否已经达到从服务器，
      是否已经存入到从服务器的硬盘中？ 检查info命令里面的aof_pending_bio_fsync属性值是否为0，如果是则表明已持久化到硬盘
      
+   
+     优点：
+          1、主从模式的一个特点是备份数据，当master节点挂了之后，因为数据有备份，方便恢复
+          2、主从模式的另外一个特点是负载均衡，master节点可以进行读写，slave节点只能进行读
      
--### redis哨兵
+     缺点：master节点挂了以后，redis就不能对外提供写服务了，因为剩下的slave不能成为master
+     
+-### redis哨兵（高可用，一个主，多个从，一个哨兵监控集群）
      1.为什么要用到哨兵？
        哨兵主要是为了解决主从架构中出现宕机的情况：
        1.1、从redis宕机
@@ -331,13 +337,20 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
               2.5.2、更新主从状态：
                      1.首先通过slaveof no one命令让选举出来的从节点成为新的主节点，然后通过slave of命令让其他从节点成为该主节点的从节点
                      2.将下线的主节点设置为新的主节点的从节点，当恢复正常时，重新从主节点复制数据
-                    
+                     
+         优点：相对于主从模式，哨兵模型保证了redis的高可用，当哨兵发现master节点挂掉了以后，就会从slave里面重新选举一个master 
+         缺点：只能满足一般生产需求，当数据量过大到一台服务器都存储不下时，这个时候就需要对数据进行分片，将数据存储在多个redis实例中。
+         
            参考资料：
            https://www.jianshu.com/p/06ab9daf921d
            https://blog.csdn.net/u012240455/article/details/81843714?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
            https://www.cnblogs.com/Eugene-Jin/p/10819601.html
 
-
+-### redis cluster模式（高可用+高并发）
+     https://blog.csdn.net/xinzun/article/details/78520986
+     https://www.cnblogs.com/mengchunchen/p/10059436.html
+     https://blog.csdn.net/liuxiao723846/article/details/86715614?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4.control
+     https://blog.csdn.net/drdongshiye/article/details/84204392
 
 -### redis的hash一致算法
      当数据量很大时，我们需要对redis进行分库分表操作，将数据均匀的分配到各个redis节点上。
