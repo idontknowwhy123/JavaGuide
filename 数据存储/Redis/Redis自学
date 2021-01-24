@@ -346,13 +346,21 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
            https://blog.csdn.net/u012240455/article/details/81843714?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
            https://www.cnblogs.com/Eugene-Jin/p/10819601.html
 
--### redis cluster模式（高可用+高并发）
+-### 基于hash slot算法的redis cluster模式（高可用+高并发，存在hash一致算法以及数据分片算法）
+     1、集群架构：
+          redis cluster是一个去中心化的集群，每个节点都会跟其他节点保持连接，用来交换彼此的信息，节点加入集群的方式是采用cluster meet命令，meet命令可以让两个节点相互握手，然后通过
+          gossip协议交换信息。如果有一个节点node1在集群中，新加入的节点node4与node1进行握手，node1会通过gossip协议将集群中其他节点的信息发送给node4，node4会一一和集群中的其他节点
+          握手，然后加入集群之中
+          （图片）
+          节点启动之后会生成一个全局的标致符，在节点与节点握手之后，这些信息也会被持久化下来，节点与节点进行通信，标致符是它唯一的标致
+        
+          集群数据以数据分布表的形式保存在各个节点上，每个节点会保存一份数据分布表，每个节点会将自己的slot(槽)信息发送给其他节点（为了节省带宽）
      https://blog.csdn.net/xinzun/article/details/78520986
      https://www.cnblogs.com/mengchunchen/p/10059436.html
      https://blog.csdn.net/liuxiao723846/article/details/86715614?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4.control
      https://blog.csdn.net/drdongshiye/article/details/84204392
 
--### redis的hash一致算法
+-### redis cluster的hash一致算法
      当数据量很大时，我们需要对redis进行分库分表操作，将数据均匀的分配到各个redis节点上。
      1.随机分配：查询的时候需要遍历各个redis服务器进行查询，
            缺陷：性能差
@@ -370,7 +378,20 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
            综上所述：一致性HASH算法对于哈希环上节点的增减，只会影响到环上的一小部分数据，具有较好的容错性和扩展性
        3.3哈希环的数据倾斜问题
            问题：在服务器节点过少时，由于服务器节点分布不均匀导致数据倾斜（被缓存的对象大部分都集中在某一台服务器上）
-       解决办法：对每一个服务器节点计算多个hash值，每一个hash位置都放置一个服务节点，称为虚拟节点，然后构造一个虚拟节点到真实节点的映射    
+       解决办法：对每一个服务器节点计算多个hash值，每一个hash位置都放置一个服务节点，称为虚拟节点，然后构造一个虚拟节点到真实节点的映射
+
+-### redis cluster的分片算法
+         一个redis集群包括包含16384个哈希槽，redis里面的每个key都属于这16384个哈希槽其中的一个，集群采用CRC16校验算法对key的CRC16校验和并对16384取余得到具体的槽位号，
+     集群里面的每个master节点负责处理一部分哈希槽对应的数据，举个例子，一个集群可以有三个节点：
+          节点A负责处理0到5500号哈希槽；
+          节点B负责处理5501到11000号哈希槽；
+          节点C负责处理11000到16384号哈希槽；
+     
+    hash slot(哈希槽)让(node)的增加和移除变得更简单：
+          增加一个master节点，就让其他master对应的hash slot移动部分过去；
+          减少一个master节点，就将该master节点对应的hash slot移动到其他master节点上去
+          
+     优点：任何一个master节点宕机，另外的master节点都不会影响，因为key找的是hash slot而不是节点机器
 
 
 -### redis的持久化策略
