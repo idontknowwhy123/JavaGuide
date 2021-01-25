@@ -346,15 +346,28 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
            https://blog.csdn.net/u012240455/article/details/81843714?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
            https://www.cnblogs.com/Eugene-Jin/p/10819601.html
 
--### 基于hash slot算法的redis cluster模式（高可用+高并发，存在hash一致算法以及数据分片算法）
+-### 基于hash slot（数据分片）算法的redis cluster模式（高可用+高并发，存在hash一致算法以及数据分片算法）
      1、集群架构：
           redis cluster是一个去中心化的集群，每个节点都会跟其他节点保持连接，用来交换彼此的信息，节点加入集群的方式是采用cluster meet命令，meet命令可以让两个节点相互握手，然后通过
           gossip协议交换信息。如果有一个节点node1在集群中，新加入的节点node4与node1进行握手，node1会通过gossip协议将集群中其他节点的信息发送给node4，node4会一一和集群中的其他节点
           握手，然后加入集群之中
           （图片）
           节点启动之后会生成一个全局的标致符，在节点与节点握手之后，这些信息也会被持久化下来，节点与节点进行通信，标致符是它唯一的标致
-        
+          
           集群数据以数据分布表的形式保存在各个节点上，每个节点会保存一份数据分布表，每个节点会将自己的slot(槽)信息发送给其他节点（为了节省带宽）
+          
+     2、数据访问
+          客户端在初始化的时候只需要知道一个节点的地址即可，客户端首先会先尝试向这个节点去执行命令，比如执行"get key"命令，如果key所在的slot(槽)刚好在这个节点上，则能够直接执行成功，
+          如果slot(槽)不在这个节点上，则节点会返回MOVED错误，同时返回该solt(槽)对应的节点信息给客户端，客户端再去正确的节点上执行命令。现在客户端有两种办法去获取数据分布表：
+            （1）、一种是客户端每次根据节点返回的MOVED信息在本地缓存slot到节点的映射关系，但是这种做法在初期会经常造成访问两次集群
+            （2）、另外一种做法是客户端在收到节点返回的MOVED信息后，通过执行clutser nodes命令去获取数据分布表，一旦数据分布表发生变更，客户端收到节点返回的MOVED错误信息，则会重新
+                  去执行cluster nodes命令去更新数据分布表
+                  
+          当某个key对应的slot（槽）正在发生迁移时客户端去访问这个key时，节点就有可能返回ASK错误，如果key对应的slot(槽)还在迁移源节点上，则能够正常访问，否则节点会返回ASK错误，描述信息会
+          返回迁移目的节点的信息，客户端会首先向迁移目的节点发送ASKING命令，然后执行之前的命令。
+         
+          集群支持hash tags的功能，即可以把一类key定位到同一个slot(槽),redis处理hash tag的逻辑也比较简单，redis只计算从第一次出现{,到第一次出现}中间的substring对应的hash值，
+          如果substring是空，则计算整个key的hash值
      https://blog.csdn.net/xinzun/article/details/78520986
      https://www.cnblogs.com/mengchunchen/p/10059436.html
      https://blog.csdn.net/liuxiao723846/article/details/86715614?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-4.control
