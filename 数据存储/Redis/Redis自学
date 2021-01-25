@@ -8,7 +8,7 @@
      5、通过主从复制和哨兵来提示它的高可用
      6、可以用作分布式锁
      7、可以用作消息中间件，支持发布订阅
-      ![](https://img-blog.csdnimg.cn/20190131185603531.png)
+     ![](https://img-blog.csdnimg.cn/20190131185603531.png)
      
 -### 一.redis缓存穿透以及解决方案
 https://www.cnblogs.com/lingyejun/p/10087135.html
