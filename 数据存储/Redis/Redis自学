@@ -122,10 +122,35 @@ sinterstore key1 key2 key3 将交集存在key1内
                  zllen:ziplist节点的个数
                  entry:节点，用于存放真正的数据项
                  zlend:用于标记ziplist的结尾
-                 []!(https://img2018.cnblogs.com/i-beta/1637947/202001/1637947-20200108103030972-681210699.png)
-                 
+                 []!(https://img2018.cnblogs.com/i-beta/1637947/202001/1637947-20200108103030972-681210699.png
                
-     2、skiplist
+     2、skiplist:包含一个字典和跳跃表，跳跃表按照score从小到大的顺序保存着所有的集合元素，字典则保存着从member到score的映射关系，查找的时间复杂度是O(logN),删除，插入的时间
+                 复杂度也是O(logN),简单来说，是一种基于并联的链表，也是链表中的一种，只不过在链表的基础上增加了跳跃的功能，正是这个跳跃的功能，保证了在查找元素时能够提供O(logN）
+                 的时间复杂度。
+                 (1)、大致的查找原理
+                 指的就是除了最下面第一层链表以外，还会产生若干层稀疏的链表，这些链表的指针故意跳过了一些节点（越高层的链表跳过的节点越多），这就使得我们在链表中查找数据时，
+                 优先去高层的链表中去查找数据，然后逐层降低，最终降到第一层节点精准的定位到数据，在这个过程中，我们跳过了一些节点，从而加快了查找的速度
+                 （2）、为什么不能确定相邻两层节点个数的比例关系
+                 skiplist并不要求上下相邻两层链表之间的节点个数有严格的比例对应关系，原因是每次新插入一个节点，就会打乱这个比例关系，如果要维持这种对应关系，就需要把新插入节点
+                 后面的节点重新进入调整，这样就会把时间复杂度重新蜕化成O(n)
+                 （3）、如果不确定相邻两层节点的个数比例关系，那每层链表的节点数目怎么确定呢？
+                 为每个节点随机的出一个层数，例如：一个节点的随机层数是3，那么就把这个节点链入到第一层到第三层的链表中，这样做的好处是，每插入一个新的节点，只需要随机生成一个链入层数，
+                 插入时只需要修改插入节点前后的指针，而不需要对很多节点都进行调整，这就降低了插入的时间复杂度，这让它在插入性能上明显优于平衡二叉树的方案。
+                 （4）、redis里面执行插入操作计算随机层数的算法
+                      * 首先每个节点都会存在于第一层链表中
+                      * 如果当前节点存在于第i层(1=<i<MaxLevel)链表中，那么当前节点存在于第i+1层链表中的概率为p
+                      * 链表的最大层数不允许超过MaxLevel
+                      伪函数：
+                      randomlevel()
+                      level := 1
+                      //random返回一个[0,1]的随机数
+                      while random() < p and level < MaxLevel
+                      level := level + 1
+                      return level
+                      注：在redis里面p=1/4，MaxLevel=32
+                  （5）skiplist与hash表，平衡树的对比
+     
+     
 https://www.cnblogs.com/yuanfang0903/p/12165394.html
 https://blog.csdn.net/weixin_38008100/article/details/94629753?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control
 
