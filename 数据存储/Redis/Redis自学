@@ -417,13 +417,13 @@ no-enviction：禁止驱逐数据，也就是说当内存不足以容纳新写�
         (1)meet:meet命令会让新加入的节点与集群中的节点进行握手，从而加入到集群之中
         (2)ping:每个节点都会频繁的给其它节点发送ping消息，用于交换自身维护的元数据信息及状态
         (3)pong:返回ping和meet消息，也可以用于信息广播及更新
-        (4)fail:
+        (4)fail:某个节点判断另外一个节点fail之后，就会发送fail消息给其他节点，告知其它节点这个节点下线了
           
      4、故障转移（高可用）
           (1)、判断节点宕机
-               在cluster-node-timeout时间内某个master节点一直没有返回pong，那么就是pfail，认为该master节点主观下线，如果超过一半的master节点都认为该master节点主观下线了的话，那么
-               该master节点就被判定为客观下线,则需要重新选举master节点
-          (2)、master节点的选举
+               在cluster-node-timeout时间内某个master节点一直没有返回pong，那么就是该master就会标记为pfail，类似于哨兵里面master节点主观下线，如果超过一半的master节点都认为该master节点主观下线了的话，那么
+               该master节点就被标记为fail,类似于哨兵里面master节点客观下线，则需要重新选举master节点
+          (2)、master节点的选举（宕机的master对应的slave会从其他的master拉取选票，票数最多的slave被选为新的master）
                1、检查从节点master主节点的超时时间，如果超时时间大于cluster-node-timeout*cluster-slave-validity-factor,就认为没有资格切换成主节点
                2、然后根据从节点复制master节点的offset对剩余从节点进行排序，offset越大就认为复制的数据越多，则优先选举该从节点
           (3)、更新主从状态
