@@ -164,6 +164,9 @@ sinterstore key1 key2 key3 将交集存在key1内
                       return level
                       注：在redis里面p=1/4，MaxLevel=32
                   （5）skiplist与hash表，平衡树的对比
+                       1、在做范围查找的时候，平衡树比skiplist操作要复杂
+                          在平衡树上，我们找到指定范围的小值之后，还需要以中序遍历的顺序继续寻找其它不超过大值的节点
+                       2、平衡树的插入和删除操作可能引发子树的调整，逻辑复杂，而skiplist的插入和删除只需要修改相邻节点的指针，操作简单又快速。
      
      
 https://www.cnblogs.com/yuanfang0903/p/12165394.html
